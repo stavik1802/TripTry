@@ -1,0 +1,1085 @@
+{
+  "as_of": "2025-09-15T14:14:56Z",
+  "trip": {
+    "cities": [
+      "Austin",
+      "Tokyo"
+    ],
+    "nights_by_city": {
+      "Austin": 4,
+      "Tokyo": 3
+    },
+    "budget": {
+      "target_currency": "EUR",
+      "cap_total": null,
+      "include_lodging": true,
+      "met": true,
+      "spend_total": {
+        "amount": 850.0,
+        "currency": "USD"
+      },
+      "note": null,
+      "meal_prices_used": {
+        "MB": {
+          "amount": 8.0,
+          "currency": "EUR"
+        },
+        "ML": {
+          "amount": 15.0,
+          "currency": "EUR"
+        },
+        "MD": {
+          "amount": 25.0,
+          "currency": "EUR"
+        }
+      }
+    },
+    "totals": {
+      "lodging": {
+        "amount": 840.0,
+        "currency": "USD"
+      },
+      "transit": {
+        "amount": 10.0,
+        "currency": "USD"
+      },
+      "intercity": {
+        "amount": 70.0,
+        "currency": "JPY"
+      },
+      "travel": {
+        "amount": 0.0,
+        "currency": "USD"
+      },
+      "poi_entry": null,
+      "meals": {
+        "amount": 336.0,
+        "currency": "EUR"
+      },
+      "grand_total": {
+        "amount": 850.0,
+        "currency": "USD"
+      }
+    },
+    "intercity": [
+      {
+        "date": "2025-10-09",
+        "from": "Austin",
+        "to": "Tokyo",
+        "mode": "bus",
+        "price": {
+          "amount": 70.0,
+          "currency": "JPY"
+        }
+      }
+    ],
+    "per_day": [
+      {
+        "date": "2025-10-05",
+        "city": "Austin",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "USD"
+          },
+          "transit": {
+            "amount": 2.5,
+            "currency": "USD"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": null,
+          "total": {
+            "amount": 122.5,
+            "currency": "USD"
+          }
+        }
+      },
+      {
+        "date": "2025-10-06",
+        "city": "Austin",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "USD"
+          },
+          "transit": {
+            "amount": 2.5,
+            "currency": "USD"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": null,
+          "total": {
+            "amount": 122.5,
+            "currency": "USD"
+          }
+        }
+      },
+      {
+        "date": "2025-10-07",
+        "city": "Austin",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "USD"
+          },
+          "transit": {
+            "amount": 2.5,
+            "currency": "USD"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": null,
+          "total": {
+            "amount": 122.5,
+            "currency": "USD"
+          }
+        }
+      },
+      {
+        "date": "2025-10-08",
+        "city": "Austin",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "USD"
+          },
+          "transit": {
+            "amount": 2.5,
+            "currency": "USD"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": null,
+          "total": {
+            "amount": 122.5,
+            "currency": "USD"
+          }
+        }
+      },
+      {
+        "date": "2025-10-09",
+        "city": "Tokyo",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "JPY"
+          },
+          "transit": {
+            "amount": 800.0,
+            "currency": "JPY"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "JPY"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": {
+            "amount": 70.0,
+            "currency": "JPY"
+          },
+          "total": {
+            "amount": 990.0,
+            "currency": "JPY"
+          }
+        }
+      },
+      {
+        "date": "2025-10-10",
+        "city": "Tokyo",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "JPY"
+          },
+          "transit": {
+            "amount": 800.0,
+            "currency": "JPY"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "JPY"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": null,
+          "total": {
+            "amount": 920.0,
+            "currency": "JPY"
+          }
+        }
+      },
+      {
+        "date": "2025-10-11",
+        "city": "Tokyo",
+        "counts": {
+          "pois": 3,
+          "meals": {
+            "Breakfast": 1,
+            "Lunch": 1,
+            "Dinner": 1
+          }
+        },
+        "spend": {
+          "lodging": {
+            "amount": 120.0,
+            "currency": "JPY"
+          },
+          "transit": {
+            "amount": 800.0,
+            "currency": "JPY"
+          },
+          "travel": {
+            "amount": 0.0,
+            "currency": "JPY"
+          },
+          "meals": {
+            "amount": 48.0,
+            "currency": "EUR"
+          },
+          "poi_entry": null,
+          "intercity": null,
+          "total": {
+            "amount": 920.0,
+            "currency": "JPY"
+          }
+        }
+      }
+    ],
+    "days": [
+      {
+        "date": "2025-10-05",
+        "city": "Austin",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "Congress Avenue Bridge Bat Watching",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P7",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "Mount Bonnell",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "Lady Bird Lake",
+            "from": "P11",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P8",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      },
+      {
+        "date": "2025-10-06",
+        "city": "Austin",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "The Driskill Hotel",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P5",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "Zilker Park",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "LBJ Presidential Library",
+            "from": "P9",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P3",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      },
+      {
+        "date": "2025-10-07",
+        "city": "Austin",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "South Congress Avenue",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P12",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "Bullock Texas State History Museum",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "Paramount Theatre",
+            "from": "P2",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P13",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      },
+      {
+        "date": "2025-10-08",
+        "city": "Austin",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "Barton Springs Pool",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P4",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "Texas State Capitol",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "The Oasis on Lake Travis",
+            "from": "P6",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P10",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "USD"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "USD"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      },
+      {
+        "date": "2025-10-09",
+        "city": "Tokyo",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "Sensoji Temple",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P7",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "Tsukiji Outer Market",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "Odaiba",
+            "from": "P11",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P8",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "JPY"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      },
+      {
+        "date": "2025-10-10",
+        "city": "Tokyo",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "Shinjuku Gyoen National Garden",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P5",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "Imperial Palace",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "Tokyo National Museum",
+            "from": "P9",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P3",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "JPY"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      },
+      {
+        "date": "2025-10-11",
+        "city": "Tokyo",
+        "start": "09:00",
+        "end": "21:30",
+        "items": [
+          {
+            "type": "meal",
+            "name": "Breakfast",
+            "from": "H",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "09:10",
+            "end": "09:55"
+          },
+          {
+            "type": "poi",
+            "name": "Ueno Park",
+            "from": "MB",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "10:05",
+            "end": "11:05"
+          },
+          {
+            "type": "meal",
+            "name": "Lunch",
+            "from": "P12",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "12:00",
+            "end": "12:45"
+          },
+          {
+            "type": "poi",
+            "name": "National Museum of Nature and Science",
+            "from": "ML",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "12:55",
+            "end": "13:55"
+          },
+          {
+            "type": "poi",
+            "name": "Roppongi Hills",
+            "from": "P2",
+            "mode": "transit",
+            "travel_min": 58,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "14:53",
+            "end": "15:53"
+          },
+          {
+            "type": "meal",
+            "name": "Dinner",
+            "from": "P15",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "18:00",
+            "end": "18:45"
+          },
+          {
+            "type": "hotel",
+            "name": "Hotel return",
+            "from": "MD",
+            "mode": "walk",
+            "travel_min": 10,
+            "travel_cost": {
+              "amount": 0.0,
+              "currency": "JPY"
+            },
+            "start": "18:55",
+            "end": "18:55"
+          }
+        ],
+        "totals": {
+          "travel_cost": {
+            "amount": 0.0,
+            "currency": "JPY"
+          },
+          "poi_count": 3,
+          "meal_count": 3
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,576 @@
+{
+  "node": "poi_discovery",
+  "timestamp": "2025-09-14T14:58:39Z",
+  "case": "Florence (adults, ~15 POIs)",
+  "input": {
+    "cities": [
+      "Florence"
+    ],
+    "city_country_map": {
+      "Florence": "Italy"
+    },
+    "dates": {
+      "start": "2025-10-05",
+      "end": "2025-10-12"
+    },
+    "preferences": {
+      "pace": "normal"
+    },
+    "travelers": {
+      "adults": 2,
+      "children": 0
+    },
+    "poi_target_per_city": 15,
+    "musts": [
+      "Uffizi Gallery",
+      "Duomo di Firenze"
+    ]
+  },
+  "output": {
+    "poi": [
+      {
+        "city": "Florence",
+        "name": "Galleria dell'Accademia",
+        "category": "Art Museum",
+        "official_url": "https://www.galleriaaccademiafirenze.it/en/visit/",
+        "other_urls": [
+          "https://florencetips.com/accademia_gallery.html"
+        ],
+        "hours": {
+          "Mon": null,
+          "Tue": "08:15–18:20",
+          "Wed": "08:15–18:20",
+          "Thu": "08:15–18:20",
+          "Fri": "08:15–18:20",
+          "Sat": "08:15–18:20",
+          "Sun": "08:15–18:20"
+        },
+        "price": {
+          "adult": 16.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7765,
+          "lon": 11.256
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/accademia_gallery.html",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.45
+      },
+      {
+        "city": "Florence",
+        "name": "Palazzo Vecchio",
+        "category": "Historic Building",
+        "official_url": "https://www.museicivicifiorentini.comune.fi.it/en/palazzo-vecchio/",
+        "other_urls": [
+          "https://florencetips.com/palazzo_vecchio.html"
+        ],
+        "hours": {
+          "Mon": "09:00–22:00",
+          "Tue": "09:00–22:00",
+          "Wed": "09:00–22:00",
+          "Thu": "09:00–14:00",
+          "Fri": "09:00–22:00",
+          "Sat": "09:00–22:00",
+          "Sun": "09:00–22:00"
+        },
+        "price": {
+          "adult": 10.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7692,
+          "lon": 11.255
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://florencetips.com/palazzo_vecchio.html",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.45
+      },
+      {
+        "city": "Florence",
+        "name": "Ponte Vecchio",
+        "category": "Bridge",
+        "official_url": "https://www.visitflorence.com/florence-monuments/ponte-vecchio.html",
+        "other_urls": [
+          "https://florencetips.com/ponte_vecchio_bridge.html"
+        ],
+        "hours": null,
+        "price": {
+          "adult": null,
+          "child": null,
+          "currency": null
+        },
+        "coords": {
+          "lat": 43.7679,
+          "lon": 11.2509
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://florencetips.com/ponte_vecchio_bridge.html",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.35
+      },
+      {
+        "city": "Florence",
+        "name": "Uffizi Gallery",
+        "category": "Art Museum",
+        "official_url": "https://www.uffizi.it/en/tickets",
+        "other_urls": [
+          "https://florencetips.com/uffizi_gallery.html"
+        ],
+        "hours": {
+          "Mon": null,
+          "Tue": "08:15–18:50",
+          "Wed": "08:15–18:50",
+          "Thu": "08:15–18:50",
+          "Fri": "08:15–18:50",
+          "Sat": "08:15–18:50",
+          "Sun": "08:15–18:50"
+        },
+        "price": {
+          "adult": 25.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7687,
+          "lon": 11.2555
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://florencetips.com/uffizi_gallery.html",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Basilica di Santa Croce",
+        "category": "Basilica",
+        "official_url": "https://www.santacroceopera.it/en/",
+        "other_urls": [
+          "https://florencetips.com/basilica_of_santa_croce.html"
+        ],
+        "hours": {
+          "Mon": "09:30–17:30",
+          "Tue": "09:30–17:30",
+          "Wed": "09:30–17:30",
+          "Thu": "09:30–17:30",
+          "Fri": "09:30–17:30",
+          "Sat": "09:30–17:30",
+          "Sun": "12:30–17:45"
+        },
+        "price": {
+          "adult": 8.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7687,
+          "lon": 11.258
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://florencetips.com/basilica_of_santa_croce.html",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Brunelleschi’s Duomo",
+        "category": "Cathedral",
+        "official_url": "https://www.duomo.firenze.it/en/",
+        "other_urls": [
+          "https://florencetips.com/duomo.html"
+        ],
+        "hours": {
+          "Mon": "08:15–19:45",
+          "Tue": "08:15–19:45",
+          "Wed": "08:15–19:45",
+          "Thu": "08:15–19:45",
+          "Fri": "08:15–19:45",
+          "Sat": "08:15–17:30",
+          "Sun": "12:45–17:30"
+        },
+        "price": {
+          "adult": 30.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7731,
+          "lon": 11.256
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://florencetips.com/duomo.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Cappelle Medicee",
+        "category": "Chapel",
+        "official_url": null,
+        "other_urls": [
+          "https://florencetips.com/medici-chapels.html"
+        ],
+        "hours": {
+          "Mon": "09:00–17:00",
+          "Tue": "09:00–17:00",
+          "Wed": "09:00–17:00",
+          "Thu": "09:00–17:00",
+          "Fri": "09:00–17:00",
+          "Sat": "09:00–17:00",
+          "Sun": "09:00–17:00"
+        },
+        "price": {
+          "adult": 9.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.775,
+          "lon": 11.253
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://florencetips.com/medici-chapels.html",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Boboli Gardens",
+        "category": "Garden",
+        "official_url": "https://www.uffizi.it/en/boboli-gardens",
+        "other_urls": [
+          "https://florencetips.com/boboli-gardens.html"
+        ],
+        "hours": {
+          "Mon": "08:15–18:30",
+          "Tue": "08:15–18:30",
+          "Wed": "08:15–18:30",
+          "Thu": "08:15–18:30",
+          "Fri": "08:15–18:30",
+          "Sat": "08:15–18:30",
+          "Sun": "08:15–18:30"
+        },
+        "price": {
+          "adult": 10.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7629,
+          "lon": 11.247
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/",
+          "https://florencetips.com/boboli-gardens.html"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Museo dell’Opera del Duomo",
+        "category": "Museum",
+        "official_url": "https://www.duomo.firenze.it/en/museum/",
+        "other_urls": [
+          "https://florencetips.com/duomo.html"
+        ],
+        "hours": {
+          "Mon": "09:00–19:00",
+          "Tue": "09:00–19:00",
+          "Wed": "09:00–19:00",
+          "Thu": "09:00–19:00",
+          "Fri": "09:00–19:00",
+          "Sat": "09:00–19:00",
+          "Sun": "09:00–19:00"
+        },
+        "price": {
+          "adult": 15.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7731,
+          "lon": 11.256
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://florencetips.com/duomo.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Palazzo Pitti",
+        "category": "Palace",
+        "official_url": "https://www.uffizi.it/en/pitti-palace",
+        "other_urls": [
+          "https://florencetips.com/pitti-palace.html"
+        ],
+        "hours": {
+          "Mon": "08:15–18:50",
+          "Tue": "08:15–18:50",
+          "Wed": "08:15–18:50",
+          "Thu": "08:15–18:50",
+          "Fri": "08:15–18:50",
+          "Sat": "08:15–18:50",
+          "Sun": "08:15–18:50"
+        },
+        "price": {
+          "adult": 16.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.767,
+          "lon": 11.247
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://florencetips.com/pitti-palace.html",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Giotto’s Bell Tower",
+        "category": "Tower",
+        "official_url": "https://duomo.firenze.it/en/discover/giotto-s-bell-tower",
+        "other_urls": [
+          "https://florencetips.com/giotto-bell-tower.html"
+        ],
+        "hours": {
+          "Mon": "08:15–18:50",
+          "Tue": "08:15–18:50",
+          "Wed": "08:15–18:50",
+          "Thu": "08:15–18:50",
+          "Fri": "08:15–18:50",
+          "Sat": "08:15–18:50",
+          "Sun": "08:15–18:50"
+        },
+        "price": {
+          "adult": 18.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 43.7731,
+          "lon": 11.256
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://florencetips.com/giotto-bell-tower.html",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      },
+      {
+        "city": "Florence",
+        "name": "Mercato Centrale",
+        "category": "Market",
+        "official_url": null,
+        "other_urls": [
+          "https://florencetips.com/market.html"
+        ],
+        "hours": null,
+        "price": {
+          "adult": null,
+          "child": null,
+          "currency": null
+        },
+        "coords": {
+          "lat": 43.774,
+          "lon": 11.253
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://florencetips.com/market.html",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.0
+      },
+      {
+        "city": "Florence",
+        "name": "Piazza della Signoria",
+        "category": "Square",
+        "official_url": null,
+        "other_urls": [
+          "https://florencetips.com/piazza_della_signoria.html"
+        ],
+        "hours": null,
+        "price": {
+          "adult": null,
+          "child": null,
+          "currency": null
+        },
+        "coords": {
+          "lat": 43.7684,
+          "lon": 11.255
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/piazza_della_signoria.html",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.0
+      },
+      {
+        "city": "Florence",
+        "name": "Piazzale Michelangelo",
+        "category": "Viewpoint",
+        "official_url": null,
+        "other_urls": [
+          "https://florencetips.com/piazzale_michelangelo.html"
+        ],
+        "hours": null,
+        "price": {
+          "adult": null,
+          "child": null,
+          "currency": null
+        },
+        "coords": {
+          "lat": 43.7629,
+          "lon": 11.265
+        },
+        "source_urls": [
+          "https://www.visitflorence.com/",
+          "https://www.destinationflorence.com/en",
+          "https://florencetips.com/piazzale_michelangelo.html",
+          "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+          "https://florencetips.com/tourist-attractions.html",
+          "https://www.italia.it/en/tuscany/florence",
+          "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+          "https://www.italia.it/en",
+          "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.0
+      }
+    ],
+    "poi_sources": {
+      "Florence": [
+        "https://www.tripadvisor.ca/ShowTopic-g187895-i68-k6374549-Official_Websites_for_Florence_Duomo_and_more-Florence_Tuscany.html",
+        "https://thattravelista.com/top-attractions-things-to-do-florence-italy/",
+        "https://www.visitflorence.com/",
+        "https://www.italia.it/en/tuscany/florence",
+        "https://www.italia.it/en",
+        "https://www.destinationflorence.com/en",
+        "https://florencetips.com/tourist-attractions.html",
+        "https://www.getyourguide.com/explorer/florence-ttd32/landmarks-in-florence/"
+      ]
+    }
+  },
+  "logs_tail": [
+    "POI_Discovery: Florence seeds=8, pages=8, extracted=14, kept=14"
+  ]
+}

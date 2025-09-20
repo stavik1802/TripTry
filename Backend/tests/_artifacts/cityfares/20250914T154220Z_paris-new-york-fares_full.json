@@ -1,0 +1,123 @@
+{
+  "node": "cityfares_discovery",
+  "timestamp": "2025-09-14T15:42:20Z",
+  "case": "Paris + New York fares",
+  "input": {
+    "cities": [
+      "Paris",
+      "New York"
+    ],
+    "city_country_map": {
+      "Paris": "France",
+      "New York": "United States"
+    },
+    "dates": {
+      "start": "2025-10-05",
+      "end": "2025-10-12"
+    },
+    "fx": {
+      "currencies": {
+        "Italy": "EUR",
+        "France": "EUR",
+        "United States": "USD",
+        "Japan": "JPY"
+      }
+    }
+  },
+  "output": {
+    "city_fares": {
+      "Paris": {
+        "transit": {
+          "single": {
+            "amount": 2.5,
+            "currency": "EUR",
+            "note": "LLM extraction"
+          },
+          "day_pass": {
+            "amount": 12.0,
+            "currency": "EUR",
+            "note": "LLM extraction"
+          },
+          "weekly_pass": {
+            "amount": 31.6,
+            "currency": "EUR",
+            "note": "LLM extraction"
+          },
+          "sources": [
+            "https://www.iledefrance-mobilites.fr/en/tickets-fares/detail/ticket-metro-train-rer",
+            "https://www.iledefrance-mobilites.fr/en/tickets-fares/detail/navigo-day-ticket",
+            "https://www.iledefrance-mobilites.fr/en/tickets-fares/detail/forfait-navigo-semaine",
+            "https://www.paristoolkit.com/briefing/paris_travel_passes.htm",
+            "https://www.paristoolkit.com/briefing/paris_metro.htm",
+            "https://en.wikipedia.org/wiki/Public_transport_fares_in_the_%C3%8Ele-de-France",
+            "https://www.service-public.fr/particuliers/actualites/A17851?lang=en",
+            "https://www.reddit.com/r/ParisTravelGuide/comments/1hqvfzf/2025_public_transport_fares_now_in_effect/",
+            "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/liste"
+          ]
+        },
+        "taxi": {
+          "base": 4.0,
+          "per_km": 1.05,
+          "per_min": 0.5,
+          "currency": "EUR",
+          "sources": [
+            "https://www.paristoolkit.com/briefing/paris_metro.htm",
+            "https://www.paristoolkit.com/briefing/paris_travel_passes.htm",
+            "https://en.wikipedia.org/wiki/Public_transport_fares_in_the_%C3%8Ele-de-France",
+            "https://www.service-public.fr/particuliers/actualites/A17851?lang=en",
+            "https://www.reddit.com/r/ParisTravelGuide/comments/1hqvfzf/2025_public_transport_fares_now_in_effect/",
+            "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/liste"
+          ],
+          "note": "LLM extraction"
+        }
+      },
+      "New York": {
+        "transit": {
+          "single": {
+            "amount": 2.9,
+            "currency": "USD",
+            "note": "LLM extraction"
+          },
+          "day_pass": {
+            "amount": null,
+            "currency": null,
+            "note": "LLM extraction"
+          },
+          "weekly_pass": {
+            "amount": 34.0,
+            "currency": "USD",
+            "note": "LLM extraction"
+          },
+          "sources": [
+            "https://www.mta.info/fares-tolls/subway-bus",
+            "https://en.wikipedia.org/wiki/New_York_City_transit_fares",
+            "https://housinganywhere.com/New-York--United-States/public-transport-new-york",
+            "https://portal.311.nyc.gov/article/?kanumber=KA-01014",
+            "https://www.mta.info/fares-tolls",
+            "https://newyorkpass.com/en/things-to-do/public-transportation-new-york-city-new-york-metrocard"
+          ]
+        },
+        "taxi": {
+          "base": 3.5,
+          "per_km": 2.5,
+          "per_min": 0.5,
+          "currency": "USD",
+          "sources": [
+            "https://www.nyc.gov/assets/home/images/global/ico-311-51x51.png",
+            "https://en.wikipedia.org/wiki/New_York_City_transit_fares",
+            "https://housinganywhere.com/New-York--United-States/public-transport-new-york",
+            "https://portal.311.nyc.gov/article/?kanumber=KA-01014",
+            "https://www.mta.info/fares-tolls",
+            "https://www.mta.info/fares-tolls/subway-bus",
+            "https://newyorkpass.com/en/things-to-do/public-transportation-new-york-city-new-york-metrocard"
+          ],
+          "note": "LLM extraction"
+        }
+      }
+    }
+  },
+  "logs_tail": [
+    "CityFares[LLM]: Paris transit(single=2.5 EUR, day=12.0 EUR, week=31.6 EUR); taxi(base=4.0, km=1.05, min=0.5 EUR)",
+    "CityFares[LLM]: New York transit(single=2.9 USD, day=None None, week=34.0 USD); taxi(base=3.5, km=2.5, min=0.5 USD)"
+  ]
+}

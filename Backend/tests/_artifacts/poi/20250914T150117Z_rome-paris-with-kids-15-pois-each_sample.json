@@ -1,0 +1,239 @@
+{
+  "case": "Rome + Paris (with kids, ~15 POIs each)",
+  "target_per_city": 15,
+  "by_city_counts": {
+    "Rome": 15,
+    "Paris": 15
+  },
+  "sample": {
+    "Rome": [
+      {
+        "city": "Rome",
+        "name": "Bioparco di Roma",
+        "category": "Zoo",
+        "official_url": "https://www.tiqets.com/en/rome-attractions-c71631/tickets-for-bioparco-the-zoo-of-rome-p976690/",
+        "other_urls": null,
+        "hours": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null,
+          "Sat": null,
+          "Sun": null
+        },
+        "price": {
+          "adult": 15.0,
+          "child": 13.0,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 41.9115,
+          "lon": 12.4942
+        },
+        "source_urls": [
+          "https://www.visitacity.com/en/rome/attractions-map",
+          "https://www.tripadvisor.com/Attractions-g187791-Activities-Rome_Lazio.html",
+          "https://www.turismoroma.it/en",
+          "https://www.camillajohannesen.com/blog/top14-things-to-do-in-rome-italy",
+          "https://www.italia.it/en/lazio/rome",
+          "https://romesite.com/attractions.html",
+          "https://www.italia.it/en",
+          "https://www.reddit.com/r/ItalyTravel/comments/16a3ljx/what_site_to_buy_tickets_on_for_attractions_in/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.25
+      },
+      {
+        "city": "Rome",
+        "name": "Bioparco di Roma",
+        "category": "Zoo",
+        "official_url": "https://www.tiqets.com/en/rome-attractions-c71631/tickets-for-bioparco-the-zoo-of-rome-p976690/",
+        "other_urls": null,
+        "hours": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null,
+          "Sat": null,
+          "Sun": null
+        },
+        "price": {
+          "adult": 15.0,
+          "child": 13.0,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 41.9115,
+          "lon": 12.4942
+        },
+        "source_urls": [
+          "https://www.visitacity.com/en/rome/attractions-map",
+          "https://www.tripadvisor.com/Attractions-g187791-Activities-Rome_Lazio.html",
+          "https://www.turismoroma.it/en",
+          "https://www.camillajohannesen.com/blog/top14-things-to-do-in-rome-italy",
+          "https://www.italia.it/en/lazio/rome",
+          "https://romesite.com/attractions.html",
+          "https://www.italia.it/en",
+          "https://www.reddit.com/r/ItalyTravel/comments/16a3ljx/what_site_to_buy_tickets_on_for_attractions_in/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.25
+      },
+      {
+        "city": "Rome",
+        "name": "Pantheon",
+        "category": "Ancient Ruins",
+        "official_url": "https://romesite.com/pantheon.html",
+        "other_urls": [
+          "https://www.getyourguide.com/pantheon-tickets-l2738/"
+        ],
+        "hours": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null,
+          "Sat": null,
+          "Sun": null
+        },
+        "price": {
+          "adult": 6.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 41.8986,
+          "lon": 12.4769
+        },
+        "source_urls": [
+          "https://www.visitacity.com/en/rome/attractions-map",
+          "https://www.tripadvisor.com/Attractions-g187791-Activities-Rome_Lazio.html",
+          "https://www.turismoroma.it/en",
+          "https://www.camillajohannesen.com/blog/top14-things-to-do-in-rome-italy",
+          "https://www.getyourguide.com/pantheon-tickets-l2738/",
+          "https://www.italia.it/en/lazio/rome",
+          "https://romesite.com/attractions.html",
+          "https://www.italia.it/en",
+          "https://www.reddit.com/r/ItalyTravel/comments/16a3ljx/what_site_to_buy_tickets_on_for_attractions_in/"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.1
+      }
+    ],
+    "Paris": [
+      {
+        "city": "Paris",
+        "name": "Luxembourg Gardens",
+        "category": "Park",
+        "official_url": "https://www.senat.fr/visites/jardin_du_luxembourg.html",
+        "other_urls": null,
+        "hours": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null,
+          "Sat": null,
+          "Sun": null
+        },
+        "price": {
+          "adult": null,
+          "child": null,
+          "currency": null
+        },
+        "coords": {
+          "lat": 48.8462,
+          "lon": 2.3372
+        },
+        "source_urls": [
+          "https://www.reddit.com/r/ParisTravelGuide/comments/1mjqgyn/official_websites_for_tourist_attractions/",
+          "https://www.toureiffel.paris/en",
+          "https://www.tripadvisor.com/Attractions-g187147-Activities-c47-Paris_Ile_de_France.html",
+          "https://www.visitparisregion.com/en",
+          "https://parisjetaime.com/eng/",
+          "https://www.parisperfect.com/plan-your-trip/things-to-see/monuments-landmarks.php",
+          "https://wavesandcobblestones.com/stop-feeling-guilty-for-loving-these-touristy-paris-attractions/",
+          "https://parisjetaime.com/eng/tickets"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.55
+      },
+      {
+        "city": "Paris",
+        "name": "Palais Garnier",
+        "category": "Theater",
+        "official_url": "https://www.operadeparis.fr/en/visits/palais-garnier",
+        "other_urls": null,
+        "hours": {
+          "Mon": "10:00–17:00",
+          "Tue": "10:00–17:00",
+          "Wed": "10:00–17:00",
+          "Thu": "10:00–17:00",
+          "Fri": "10:00–17:00",
+          "Sat": "10:00–17:00",
+          "Sun": "10:00–17:00"
+        },
+        "price": {
+          "adult": 17.0,
+          "child": null,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 48.8719,
+          "lon": 2.3315
+        },
+        "source_urls": [
+          "https://www.reddit.com/r/ParisTravelGuide/comments/1mjqgyn/official_websites_for_tourist_attractions/",
+          "https://www.toureiffel.paris/en",
+          "https://www.tripadvisor.com/Attractions-g187147-Activities-c47-Paris_Ile_de_France.html",
+          "https://www.visitparisregion.com/en",
+          "https://parisjetaime.com/eng/",
+          "https://www.parisperfect.com/plan-your-trip/things-to-see/monuments-landmarks.php",
+          "https://wavesandcobblestones.com/stop-feeling-guilty-for-loving-these-touristy-paris-attractions/",
+          "https://parisjetaime.com/eng/tickets"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.45
+      },
+      {
+        "city": "Paris",
+        "name": "Aquarium de Paris",
+        "category": "Aquarium",
+        "official_url": "https://www.aquariumparis.com/en/",
+        "other_urls": null,
+        "hours": {
+          "Mon": "10:00–20:00",
+          "Tue": "10:00–20:00",
+          "Wed": "10:00–20:00",
+          "Thu": "10:00–20:00",
+          "Fri": "10:00–20:00",
+          "Sat": "10:00–20:00",
+          "Sun": "10:00–20:00"
+        },
+        "price": {
+          "adult": 20.0,
+          "child": 13.0,
+          "currency": "EUR"
+        },
+        "coords": {
+          "lat": 48.8422,
+          "lon": 2.25
+        },
+        "source_urls": [
+          "https://www.reddit.com/r/ParisTravelGuide/comments/1mjqgyn/official_websites_for_tourist_attractions/",
+          "https://www.toureiffel.paris/en",
+          "https://www.tripadvisor.com/Attractions-g187147-Activities-c47-Paris_Ile_de_France.html",
+          "https://www.visitparisregion.com/en",
+          "https://parisjetaime.com/eng/",
+          "https://www.parisperfect.com/plan-your-trip/things-to-see/monuments-landmarks.php",
+          "https://wavesandcobblestones.com/stop-feeling-guilty-for-loving-these-touristy-paris-attractions/",
+          "https://parisjetaime.com/eng/tickets"
+        ],
+        "source_note": "extracted via Tavily+LLM",
+        "score": 0.25
+      }
+    ]
+  }
+}

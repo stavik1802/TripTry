@@ -1,0 +1,14 @@
+[project]
+name = "trip-planner-backend"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic>=2.6",
+  "pymongo[srv]>=4.6",     # already added in Step 1 (ok if unused)
+  "langgraph>=0.2.0"
+]
+
+[tool.uvicorn]
+factory = false

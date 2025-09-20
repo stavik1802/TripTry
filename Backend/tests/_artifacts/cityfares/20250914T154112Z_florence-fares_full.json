@@ -1,0 +1,74 @@
+{
+  "node": "cityfares_discovery",
+  "timestamp": "2025-09-14T15:41:12Z",
+  "case": "Florence fares",
+  "input": {
+    "cities": [
+      "Florence"
+    ],
+    "city_country_map": {
+      "Florence": "Italy"
+    },
+    "dates": {
+      "start": "2025-10-05",
+      "end": "2025-10-12"
+    },
+    "fx": {
+      "currencies": {
+        "Italy": "EUR",
+        "France": "EUR",
+        "United States": "USD",
+        "Japan": "JPY"
+      }
+    }
+  },
+  "output": {
+    "city_fares": {
+      "Florence": {
+        "transit": {
+          "single": {
+            "amount": 1.7,
+            "currency": "EUR",
+            "note": "LLM extraction"
+          },
+          "day_pass": {
+            "amount": null,
+            "currency": null,
+            "note": "LLM extraction"
+          },
+          "weekly_pass": {
+            "amount": 38.7,
+            "currency": "EUR",
+            "note": "LLM extraction"
+          },
+          "sources": [
+            "http://sancascianovp.com/enjoy-tuscany/visiting-florence/florence-public-transportation.html",
+            "https://www.at-bus.it/en/ticket",
+            "https://www.introducingflorence.com/tickets-and-travel-cards",
+            "https://housinganywhere.com/Florence--Italy/florence-public-transport",
+            "https://florencetips.com/transport.html",
+            "https://www.florencewise.com/essential-things/how-to-get-around-with-florence-transportation/"
+          ]
+        },
+        "taxi": {
+          "base": 3.5,
+          "per_km": 1.1,
+          "per_min": 0.3,
+          "currency": "EUR",
+          "sources": [
+            "https://housinganywhere.com/Florence--Italy/florence-public-transport",
+            "https://www.introducingflorence.com/tickets-and-travel-cards",
+            "http://sancascianovp.com/enjoy-tuscany/visiting-florence/florence-public-transportation.html",
+            "https://www.at-bus.it/en/ticket",
+            "https://florencetips.com/transport.html",
+            "https://www.florencewise.com/essential-things/how-to-get-around-with-florence-transportation/"
+          ],
+          "note": "LLM extraction"
+        }
+      }
+    }
+  },
+  "logs_tail": [
+    "CityFares[LLM]: Florence transit(single=1.7 EUR, day=None None, week=38.7 EUR); taxi(base=3.5, km=1.1, min=0.3 EUR)"
+  ]
+}

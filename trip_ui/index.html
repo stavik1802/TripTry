@@ -1,0 +1,28 @@
+<!-- trip-ui/index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Trip Planner UI</title>
+
+    <!-- Optional: set the API base for the UI.tsx resolver.
+         If you later switch to a .env (VITE_API_BASE=...), you can remove this. -->
+    <script>
+      // Point this to your backend dev server
+      window.__API_BASE__ = "http://localhost:8000";
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Vite entry (TypeScript + React) -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Optional: noscript fallback -->
+    <noscript>
+      <strong>This app requires JavaScript to run. Please enable it to continue.</strong>
+    </noscript>
+  </body>
+</html>
