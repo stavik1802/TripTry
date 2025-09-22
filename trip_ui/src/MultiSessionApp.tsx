@@ -251,6 +251,32 @@ export default function MultiSessionApp(): JSX.Element {
     }
   };
 
+  // --------------------------- Export helpers ---------------------------
+  async function exportLatest(format: 'json' | 'md' | 'html' | 'pdf') {
+    try {
+      if (!activeSession) throw new Error('No active session');
+      const url = `${API_BASE}/trip/export?session_id=${encodeURIComponent(activeSession.id)}&fmt=${encodeURIComponent(format)}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(`Export failed: HTTP ${res.status}${text ? ` - ${text}` : ''}`);
+      }
+      const blob = await res.blob();
+      const ext = format === 'md' ? 'md' : format;
+      const filename = `trip_${activeSession.id}_last.${ext}`;
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(href);
+    } catch (e: any) {
+      setError(e?.message || String(e));
+    }
+  }
+
   // Auto-create first session if none exist
   useEffect(() => {
     if (sessions.length === 0) {
@@ -330,6 +356,29 @@ export default function MultiSessionApp(): JSX.Element {
               <h2 className="text-lg font-semibold text-gray-800">{activeSession.name}</h2>
               <div className="text-sm text-gray-500">
                 Session ID: {activeSession.id}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button onClick={() => exportLatest('json')} className="bg-gray-700 text-white hover:bg-gray-800">Export JSON</Button>
+                <Button onClick={() => exportLatest('md')} className="bg-gray-600 text-white hover:bg-gray-700">Export MD</Button>
+                <Button onClick={() => exportLatest('html')} className="bg-gray-500 text-white hover:bg-gray-600">Export HTML</Button>
+                <Button onClick={() => exportLatest('pdf')} className="bg-gray-400 text-white hover:bg-gray-500">Export PDF (latest)</Button>
+                <Button onClick={async () => {
+                  try {
+                    if (!activeSession) throw new Error('No active session');
+                    const url = `${API_BASE}/trip/export?session_id=${encodeURIComponent(activeSession.id)}&fmt=pdf&all_responses=true`;
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error(`Export failed: HTTP ${res.status}`);
+                    const blob = await res.blob();
+                    const href = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = href;
+                    a.download = `trip_${activeSession.id}_all_responses.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(href);
+                  } catch (e: any) { setError(e?.message || String(e)); }
+                }} className="bg-gray-400 text-white hover:bg-gray-500">Export PDF (all)</Button>
               </div>
             </div>
 

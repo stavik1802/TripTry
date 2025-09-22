@@ -24,12 +24,14 @@ A sophisticated AI-powered trip planning system that uses multiple specialized a
 
 ## 🏗️ Architecture
 
-### System Overview
-```
-User Request → Planning Agent → Research Agent → Gap Agent → Budget Agent → Output Agent
-                    ↓              ↓              ↓
-                Learning Agent ← Learning Agent ← Learning Agent
-```
+
+
+### Agent Coordination Graph
+
+The following diagram illustrates the end-to-end agent workflow, including retries, SLA shortcuts, gap detection/filling, and error handling.
+
+![Agent Coordination Graph](Backend/assets/agent_workflow.png)
+
 
 ### Core Components
 

@@ -197,6 +197,13 @@ class AdvancedMultiAgentSystem:
                 user_id=user_id,
                 context=agent_context,
             )
+            # Propagate run_id (if provided in context.shared_data) into state for DB logging
+            try:
+                if hasattr(agent_context, 'shared_data') and isinstance(agent_context.shared_data, dict):
+                    if agent_context.shared_data.get("run_id"):
+                        initial_state["run_id"] = agent_context.shared_data.get("run_id")
+            except Exception:
+                pass
             
             # Pass SLA timeout to state if provided
             if self.sla_seconds:

@@ -23,6 +23,11 @@ from datetime import datetime
 from pymongo import MongoClient, ASCENDING, DESCENDING
 from pymongo.collection import Collection
 from dotenv import load_dotenv
+try:
+    # bson is provided by pymongo
+    from bson import ObjectId  # type: ignore
+except Exception:
+    ObjectId = None  # fallback for type checkers
 
 load_dotenv()
 
@@ -82,4 +87,40 @@ class MongoStore:
     # optional for a quick demo page
     def latest(self, limit: int = 20) -> List[Dict[str, Any]]:
         cur = self.runs.find({}, {"logs": {"$slice": -6}}).sort("created_at", DESCENDING).limit(limit)
+        return list(cur)
+
+    # -----------------------------
+    # Retrieval helpers for exports
+    # -----------------------------
+    def get_run(self, run_id: Any) -> Optional[Dict[str, Any]]:
+        """Return a run document by id (string or ObjectId)."""
+        if run_id is None:
+            return None
+        q = {"_id": run_id}
+        # accept string ids as well
+        if isinstance(run_id, str) and ObjectId is not None:
+            try:
+                q = {"_id": ObjectId(run_id)}
+            except Exception:
+                # keep as string id
+                q = {"_id": run_id}
+        return self.runs.find_one(q)
+
+    def get_latest_success_by_session(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """Return the latest successfully finished run for a given session."""
+        if not session_id:
+            return None
+        doc = self.runs.find_one(
+            {"session_id": session_id, "status": "success"},
+            sort=[("created_at", DESCENDING)],
+        )
+        return doc
+
+    def get_all_success_by_session(self, session_id: str, *, limit: int = 100) -> List[Dict[str, Any]]:
+        """Return all successful runs for session_id ordered by creation time ascending."""
+        if not session_id:
+            return []
+        cur = self.runs.find(
+            {"session_id": session_id, "status": "success"}
+        ).sort("created_at", ASCENDING).limit(limit)
         return list(cur)

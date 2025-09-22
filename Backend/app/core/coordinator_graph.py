@@ -70,6 +70,7 @@ from app.agents.agent_state import AgentState, AgentMessage, AgentStatus, AgentM
 from app.agents.base_agent import BaseAgent, AgentContext
 from app.agents.utils.memory_system import MemorySystem
 from app.agents.learning_agent import LearningAgent
+from app.database.mongo_store import MongoStore
 
 # Robust imports (support both spellings for research agent)
 try:
@@ -134,6 +135,11 @@ class AgentCoordinator:
         }
         # Initialize memory system
         self.memory_system = MemorySystem()
+        # Optional Mongo store for per-agent outputs/errors
+        try:
+            self.store = MongoStore()
+        except Exception:
+            self.store = None
         self.setup_coordination_protocols()
 
     def setup_coordination_protocols(self):
@@ -313,6 +319,17 @@ class AgentCoordinator:
                     "data_quality": len(result.get("planning_data", {}))
                 }
             )
+            # Persist per-agent output
+            try:
+                if self.store:
+                    self.store.log_agent_output(
+                        run_id=ctx.shared_data.get("run_id"),
+                        agent_name="planning_agent",
+                        payload={"status": "success", "output": result},
+                        step="planning",
+                    )
+            except Exception:
+                pass
 
             # notify research
             self._enqueue(state, AgentMessage(
@@ -330,7 +347,26 @@ class AgentCoordinator:
             self._set_error(state, "planning_agent", str(e))
             state["next_agent"] = "error_handler"
             self._telemetry(state, "planning_agent", "planning", False, (datetime.now() - t0).total_seconds())
-        return state
+            # Persist structured error metadata
+            try:
+                if hasattr(self, 'store') and self.store:
+                    import traceback, hashlib
+                    tb = traceback.format_exc()
+                    digest = hashlib.sha256(tb.encode("utf-8")).hexdigest()
+                    run_ref = state.get("run_id") or state.get("session_id")
+                    self.store.append_log(
+                        run_ref,
+                        {
+                            "level": "error",
+                            "agent": "planning_agent",
+                            "step": "planning",
+                            "message": str(e),
+                            "trace_hash": digest,
+                        },
+                    )
+            except Exception:
+                pass
+            return state
 
     def research_agent_node(self, state: AgentState) -> AgentState:
         """Execute research agent to gather data using external tools."""
@@ -384,6 +420,16 @@ class AgentCoordinator:
                     "pois_found": pois_found
                 }
             )
+            try:
+                if self.store:
+                    self.store.log_agent_output(
+                        run_id=ctx.shared_data.get("run_id"),
+                        agent_name="research_agent",
+                        payload={"status": "success", "output": state.get("research_data", {})},
+                        step="research",
+                    )
+            except Exception:
+                pass
 
             # notify budget (SLA shortcut handled in routing)
             self._enqueue(state, AgentMessage(
@@ -401,7 +447,25 @@ class AgentCoordinator:
             self._set_error(state, "research_agent", str(e))
             state["next_agent"] = "error_handler"
             self._telemetry(state, "research_agent", "research", False, (datetime.now() - t0).total_seconds())
-        return state
+            try:
+                if hasattr(self, 'store') and self.store:
+                    import traceback, hashlib
+                    tb = traceback.format_exc()
+                    digest = hashlib.sha256(tb.encode("utf-8")).hexdigest()
+                    run_ref = state.get("run_id") or state.get("session_id")
+                    self.store.append_log(
+                        run_ref,
+                        {
+                            "level": "error",
+                            "agent": "research_agent",
+                            "step": "research",
+                            "message": str(e),
+                            "trace_hash": digest,
+                        },
+                    )
+            except Exception:
+                pass
+            return state
 
     def budget_agent_node(self, state: AgentState) -> AgentState:
         """Execute budget agent to optimize costs and create detailed itineraries."""
@@ -450,6 +514,24 @@ class AgentCoordinator:
                     "optimization_success": bool(state.get("optimized_data"))
                 }
             )
+            try:
+                if self.store:
+                    self.store.log_agent_output(
+                        run_id=ctx.shared_data.get("run_id"),
+                        agent_name="budget_agent",
+                        payload={
+                            "status": "success",
+                            "output": {
+                                "budget_data": state.get("budget_data"),
+                                "geocost_data": state.get("geocost_data"),
+                                "optimized_data": state.get("optimized_data"),
+                                "trip_data": state.get("trip_data"),
+                            },
+                        },
+                        step="budget",
+                    )
+            except Exception:
+                pass
 
             # notify response
             self._enqueue(state, AgentMessage(
@@ -467,7 +549,25 @@ class AgentCoordinator:
             self._set_error(state, "budget_agent", str(e))
             state["next_agent"] = "error_handler"
             self._telemetry(state, "budget_agent", "budget", False, (datetime.now() - t0).total_seconds())
-        return state
+            try:
+                if hasattr(self, 'store') and self.store:
+                    import traceback, hashlib
+                    tb = traceback.format_exc()
+                    digest = hashlib.sha256(tb.encode("utf-8")).hexdigest()
+                    run_ref = state.get("run_id") or state.get("session_id")
+                    self.store.append_log(
+                        run_ref,
+                        {
+                            "level": "error",
+                            "agent": "budget_agent",
+                            "step": "budget",
+                            "message": str(e),
+                            "trace_hash": digest,
+                        },
+                    )
+            except Exception:
+                pass
+            return state
 
     def response_agent_node(self, state: AgentState) -> AgentState:
         """Execute response agent to generate final user response."""
@@ -483,8 +583,36 @@ class AgentCoordinator:
 
             state["final_response"] = response
             self._set_status(state, "response_agent", "completed", None)
+            try:
+                if self.store:
+                    self.store.log_agent_output(
+                        run_id=state.get("session_id"),  # fallback if run_id missing in ctx
+                        agent_name="output_agent",
+                        payload={"status": "success", "output": response},
+                        step="output",
+                    )
+            except Exception:
+                pass
         except Exception as e:
             self._set_error(state, "response_agent", str(e))
+            try:
+                if hasattr(self, 'store') and self.store:
+                    import traceback, hashlib
+                    tb = traceback.format_exc()
+                    digest = hashlib.sha256(tb.encode("utf-8")).hexdigest()
+                    run_ref = state.get("run_id") or state.get("session_id")
+                    self.store.append_log(
+                        run_ref,
+                        {
+                            "level": "error",
+                            "agent": "response_agent",
+                            "step": "output",
+                            "message": str(e),
+                            "trace_hash": digest,
+                        },
+                    )
+            except Exception:
+                pass
         return state
 
     def error_handler_node(self, state: AgentState) -> AgentState:
@@ -543,6 +671,24 @@ class AgentCoordinator:
         except Exception as e:
             self._set_error(state, "gap_agent", str(e))
             state["next_agent"] = "error_handler"
+            try:
+                if hasattr(self, 'store') and self.store:
+                    import traceback, hashlib
+                    tb = traceback.format_exc()
+                    digest = hashlib.sha256(tb.encode("utf-8")).hexdigest()
+                    run_ref = state.get("run_id") or state.get("session_id")
+                    self.store.append_log(
+                        run_ref,
+                        {
+                            "level": "error",
+                            "agent": "gap_agent",
+                            "step": "gap",
+                            "message": str(e),
+                            "trace_hash": digest,
+                        },
+                    )
+            except Exception:
+                pass
         return state
 
     def learning_agent_node(self, state: AgentState) -> AgentState:
@@ -706,6 +852,7 @@ class AgentCoordinator:
             "sla_seconds": state.get("sla_seconds"),
             "agent_memories": state.get("agent_memories", {}),
             "tool_plan": state.get("tool_plan", []),  
+            "run_id": state.get("run_id"),
         }
         
         # Extract learned preferences from memory
