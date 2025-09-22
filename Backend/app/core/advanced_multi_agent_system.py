@@ -168,12 +168,7 @@ class AdvancedMultiAgentSystem:
                     session_id=self.session_id, user_id=user_id, limit=5
                 )
 
-            # Fallback: get recent conversations if no session history
-            if not conversation_history and user_id != "anonymous":
-                recent_conversations = self.memory_system.get_recent_conversations(
-                    user_id=user_id, hours_back=24, limit=3
-                )
-                conversation_history = recent_conversations
+            # Only use session-scoped memory; do not pull recent conversations across sessions
 
             # Create agent context with conversation history and metadata
             agent_context = AgentContext(

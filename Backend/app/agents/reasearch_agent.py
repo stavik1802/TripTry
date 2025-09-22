@@ -39,6 +39,10 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
         
         # Get planning data
         planning_data = context.shared_data.get("planning_data", {})
+        try:
+            print(f"[TRACE] ResearchAgent entry: planning_keys={list(planning_data.keys()) if isinstance(planning_data, dict) else type(planning_data)}; cities={planning_data.get('cities') if isinstance(planning_data, dict) else None} countries_count={(len(planning_data.get('countries', [])) if isinstance(planning_data, dict) else 0)}")
+        except Exception:
+            pass
         # PATCH #1: Read tool_plan only from planning_data (persisted), not from a top-level transient key
         tool_plan = list(set(planning_data.get("tool_plan", [])))
         
@@ -65,6 +69,10 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
                 if countries:
                     country = countries[0].get("country", countries[0].get("name", "Unknown"))
                     research_results["city_country_map"] = {city: country for city in planning_data["cities"]}
+                try:
+                    print(f"[TRACE] ResearchAgent seeded cities from planning: {research_results.get('cities')}, city_country_map={research_results.get('city_country_map')}")
+                except Exception:
+                    pass
             
             # Only discover cities if we still don't have them and city_recommender is in the tool plan
             if not research_results.get("cities") and "city_recommender" in tool_plan:
@@ -83,6 +91,10 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
                     if cities_data.get("cities"):
                         research_results["cities"] = cities_data.get("cities", [])
                         research_results["city_country_map"] = cities_data.get("city_country_map", {})
+                        try:
+                            print(f"[TRACE] ResearchAgent discovered cities: {research_results.get('cities')}")
+                        except Exception:
+                            pass
             else:
                 # For specific intents that need cities but don't use cities.recommender
                 # Extract city directly from planning data
@@ -94,6 +106,10 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
                         country = countries[0].get("country", "Unknown")
                         research_results["cities"] = [city]
                         research_results["city_country_map"] = {city: country}
+                        try:
+                            print(f"[TRACE] ResearchAgent extracted city from countries for intent {intent}: {city}")
+                        except Exception:
+                            pass
             
             # Execute tools based on intent and tool plan
             

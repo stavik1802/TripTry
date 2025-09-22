@@ -114,7 +114,7 @@ Please interpret the current request considering the conversation context above.
                 }
             
             interpretation = interpreter_result.get("result")
-            
+            print(f"[DEBUG] Planning agent - interpretation: {interpretation}")
             
             # Handle case where interpretation might not have model_dump method
             if hasattr(interpretation, 'model_dump'):
@@ -141,6 +141,11 @@ Please interpret the current request considering the conversation context above.
             # Create tool plan based on interpretation (already done), store in shared data
             context.shared_data["planning_data"] = plan_data
             context.shared_data["tool_plan"] = legacy_tool_plan
+            try:
+                print(f"[TRACE] PlanningAgent: set planning_data with keys={list(plan_data.keys())}")
+                print(f"[TRACE] PlanningAgent: countries_len={len(plan_data.get('countries', []))}, cities_len={len(plan_data.get('cities', []))}, tool_plan={legacy_tool_plan}")
+            except Exception:
+                pass
             
             self.update_status("completed")
             

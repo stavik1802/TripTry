@@ -290,6 +290,11 @@ class AgentCoordinator:
             
             # Sync context changes back to state
             self._sync_context_to_state(state, ctx)
+            try:
+                pd = state.get("planning_data", {}) or {}
+                print(f"[TRACE] Coordinator after planning: planning_data keys={list(pd.keys())}; cities={pd.get('cities')} countries_count={len(pd.get('countries', []))}")
+            except Exception:
+                pass
             
             # Store planning data properly
             planning_data = result.get("planning_data")
@@ -367,6 +372,8 @@ class AgentCoordinator:
             except Exception:
                 pass
             return state
+        # Ensure mutated state is returned so graph persists changes
+        return state
 
     def research_agent_node(self, state: AgentState) -> AgentState:
         """Execute research agent to gather data using external tools."""
@@ -384,6 +391,12 @@ class AgentCoordinator:
             
             # Sync context changes back to state
             self._sync_context_to_state(state, ctx)
+            try:
+                pd = state.get("planning_data", {}) or {}
+                rd = state.get("research_data", {}) or {}
+                print(f"[TRACE] Coordinator after research: planning_cities={pd.get('cities')} research_keys={list(rd.keys())}")
+            except Exception:
+                pass
             
             # merge canonical research outputs (agent returns {"status","research_data",...})
             research_data = result.get("research_data")
@@ -466,6 +479,8 @@ class AgentCoordinator:
             except Exception:
                 pass
             return state
+        # Ensure mutated state is returned so graph persists changes
+        return state
 
     def budget_agent_node(self, state: AgentState) -> AgentState:
         """Execute budget agent to optimize costs and create detailed itineraries."""
@@ -568,6 +583,8 @@ class AgentCoordinator:
             except Exception:
                 pass
             return state
+        # Ensure mutated state is returned so graph persists changes
+        return state
 
     def response_agent_node(self, state: AgentState) -> AgentState:
         """Execute response agent to generate final user response."""

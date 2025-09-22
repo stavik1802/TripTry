@@ -48,7 +48,7 @@ app.add_middleware(
 # System init
 # -------------------------------------------------------------------------
 SLA_SECONDS = 300
-system = AdvancedMultiAgentSystem(sla_seconds=SLA_SECONDS)
+# Instantiate Mongo store once (shared persistence)
 store = MongoStore()
 
 # -------------------------------------------------------------------------
@@ -138,6 +138,8 @@ def process(req: ProcessRequest):
         context["run_id"] = run_id
 
     try:
+        # Create a fresh orchestrator per request to avoid cross-session state bleed
+        system = AdvancedMultiAgentSystem(sla_seconds=SLA_SECONDS)
         result = system.process_request(
             user_request=req.user_request,
             user_id=req.user_id,

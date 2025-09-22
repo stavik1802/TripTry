@@ -454,6 +454,7 @@ def interpret(message: str) -> Interpretation:
     key = os.getenv("OPENAI_API_KEY")
     if OpenAI is None or not key:
         note = "OpenAI SDK not installed" if OpenAI is None else "missing OPENAI_API_KEY; heuristic fallback"
+        print(f"Note: {note}")
         interp = _heuristic_fallback(message, note)
         return interp
 
@@ -461,6 +462,7 @@ def interpret(message: str) -> Interpretation:
     try:
         client = OpenAI(api_key=key)
     except Exception as e:
+        print(f"Error: OpenAI client init error: {e}")
         return _heuristic_fallback(message, f"OpenAI client init error: {e}")
 
     tool_guide = json.dumps(TOOL_INVENTORY, ensure_ascii=False, indent=2)

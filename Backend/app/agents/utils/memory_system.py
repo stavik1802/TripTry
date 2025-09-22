@@ -608,24 +608,52 @@ class MemorySystem:
 
     def get_conversation_history(self, *, session_id: str = None, user_id: str = None, limit: int = 10) -> List[Dict[str, Any]]:
         """Retrieve conversation history for context in follow-up questions."""
+        # Prefer querying persistent store to avoid cross-worker cache gaps
+        if self.db is not None and session_id:
+            try:
+                cur = self.db.memories.find(
+                    {
+                        "tags": {"$in": ["conversation", session_id]},
+                        "content.kind": "conversation_turn",
+                        "content.session_id": session_id,
+                    },
+                    projection={
+                        "_id": 0,
+                        "content.user_request": 1,
+                        "content.agent_response": 1,
+                        "content.timestamp": 1,
+                        "content.session_id": 1,
+                        "content.conversation_turn": 1,
+                    },
+                ).sort([("content.conversation_turn", -1)]).limit(limit)
+                out: List[Dict[str, Any]] = []
+                for doc in cur:
+                    c = doc.get("content", {})
+                    out.append({
+                        "turn": c.get("conversation_turn", 0),
+                        "user_request": c.get("user_request", ""),
+                        "agent_response": c.get("agent_response", {}),
+                        "timestamp": c.get("timestamp", ""),
+                        "session_id": c.get("session_id", ""),
+                    })
+                return out
+            except Exception:
+                # fall back to in-memory
+                pass
+
         conversation_memories = []
-        
         for mem in self.episodic_memory.values():
             if mem.memory_type != "episodic":
                 continue
             if "conversation" not in mem.tags:
                 continue
-            
             data = mem.content or {}
             if data.get("kind") != "conversation_turn":
                 continue
-            
-            # Filter by session_id or user_id
             if session_id and data.get("session_id") != session_id:
                 continue
             if user_id and data.get("user_id") != user_id:
                 continue
-            
             conversation_memories.append({
                 "turn": data.get("conversation_turn", 0),
                 "user_request": data.get("user_request", ""),
@@ -633,16 +661,45 @@ class MemorySystem:
                 "timestamp": data.get("timestamp", ""),
                 "session_id": data.get("session_id", "")
             })
-        
-        # Sort by turn number and return most recent
         conversation_memories.sort(key=lambda x: x["turn"], reverse=True)
         return conversation_memories[:limit]
 
     def get_recent_conversations(self, *, user_id: str, hours_back: int = 24, limit: int = 5) -> List[Dict[str, Any]]:
         """Get recent conversations for user to provide context in new interactions."""
         cutoff_time = datetime.now() - timedelta(hours=hours_back)
+        if self.db is not None:
+            try:
+                cur = self.db.memories.find(
+                    {
+                        "tags": {"$in": ["conversation", user_id]},
+                        "content.kind": "conversation_turn",
+                        "content.user_id": user_id,
+                        "timestamp": {"$gte": cutoff_time},
+                    },
+                    projection={
+                        "_id": 0,
+                        "content.user_request": 1,
+                        "content.agent_response": 1,
+                        "content.timestamp": 1,
+                        "content.session_id": 1,
+                        "content.conversation_turn": 1,
+                    },
+                ).sort([("content.timestamp", -1)]).limit(limit)
+                out: List[Dict[str, Any]] = []
+                for doc in cur:
+                    c = doc.get("content", {})
+                    out.append({
+                        "session_id": c.get("session_id", ""),
+                        "user_request": c.get("user_request", ""),
+                        "agent_response": c.get("agent_response", {}),
+                        "timestamp": c.get("timestamp", ""),
+                        "turn": c.get("conversation_turn", 0),
+                    })
+                return out
+            except Exception:
+                pass
+
         recent_conversations = []
-        
         for mem in self.episodic_memory.values():
             if mem.memory_type != "episodic":
                 continue
@@ -650,13 +707,11 @@ class MemorySystem:
                 continue
             if mem.timestamp < cutoff_time:
                 continue
-            
             data = mem.content or {}
             if data.get("kind") != "conversation_turn":
                 continue
             if data.get("user_id") != user_id:
                 continue
-            
             recent_conversations.append({
                 "session_id": data.get("session_id", ""),
                 "user_request": data.get("user_request", ""),
@@ -664,7 +719,5 @@ class MemorySystem:
                 "timestamp": data.get("timestamp", ""),
                 "turn": data.get("conversation_turn", 0)
             })
-        
-        # Sort by timestamp and return most recent
         recent_conversations.sort(key=lambda x: x["timestamp"], reverse=True)
         return recent_conversations[:limit]
