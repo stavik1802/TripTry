@@ -1,10 +1,27 @@
-# Gap Agent - Handles missing data using gap_data_tool
+"""
+Gap Agent for TripPlanner Multi-Agent System
+
+This agent identifies and fills missing data gaps in the research phase. It analyzes
+the current data state, detects missing information, and uses web search tools to
+fill gaps in POIs, restaurants, fares, and other travel-related data.
+
+Key responsibilities:
+- Identify missing data using gap detection functions
+- Fill gaps using gap_data_tool with web search
+- Apply patches to research data structures
+- Handle fallback scenarios when tools are unavailable
+- Prevent infinite recursion with item limits
+
+The agent uses sophisticated patch application with support for array indexing
+and nested data structures to ensure data integrity.
+"""
+
 from typing import Any, Dict, List, Optional
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
 from .base_agent import AgentMessage, AgentContext
-from .graph_integration import AgentGraphBridge
-from .common_schema import STANDARD_TOOL_NAMES, AgentDataSchema
-from app.graph.gap.specs import (
+from app.agents.utils.graph_integration import AgentGraphBridge
+from app.core.common_schema import STANDARD_TOOL_NAMES, AgentDataSchema
+from app.tools.tools_utils.specs import (
     _missing_city_fares, _missing_intercity, _missing_pois, _missing_restaurants
 )
 
@@ -20,30 +37,20 @@ class GapAgent(MemoryEnhancedBaseAgent):
     def execute_task(self, context: AgentContext) -> Dict[str, Any]:
         """Execute gap filling task (inline call). Applies patches directly to research_data."""
         self.update_status("working")
-        print(f"[GAP_AGENT] 🚀 Starting gap filling task...")
         
         # Analyze current data for gaps
         research_data = context.shared_data.get("research_data", {})
         planning_data = context.shared_data.get("planning_data", {})
         missing_items = self.identify_missing_data(research_data, planning_data)
         
-        print(f"[GAP_AGENT] 📊 Found {len(missing_items)} missing items to fill")
         
         # Limit to maximum 8 items to prevent unlimited recursion
         MAX_ITEMS_TO_FILL = 8
         if len(missing_items) > MAX_ITEMS_TO_FILL:
-            print(f"[GAP_AGENT] ⚠️ Limiting to {MAX_ITEMS_TO_FILL} items (out of {len(missing_items)} found) to prevent recursion")
             missing_items = missing_items[:MAX_ITEMS_TO_FILL]
         
-        if missing_items:
-            print(f"[GAP_AGENT] 🔍 Missing items to fill:")
-            for i, item in enumerate(missing_items[:5]):  # Show first 5
-                print(f"  {i+1}. {item.get('path', 'unknown')} - {item.get('description', 'no description')}")
-            if len(missing_items) > 5:
-                print(f"  ... and {len(missing_items) - 5} more items")
         
         if not missing_items:
-            print(f"[GAP_AGENT] ✅ No missing data identified - nothing to fill")
             self.update_status("completed")
             return {
                 "status": "success",
@@ -53,12 +60,10 @@ class GapAgent(MemoryEnhancedBaseAgent):
             }
         
         try:
-            print(f"[GAP_AGENT] 🔧 Attempting to fill {len(missing_items)} missing items using gap_data_tool...")
             
             # Validate tool availability
             tool_name = STANDARD_TOOL_NAMES["gap_data"]
             if not AgentDataSchema.validate_tool_availability(tool_name, self.graph_bridge.available_tools):
-                print(f"[GAP_AGENT] ❌ Gap data tool not available, using fallback")
                 return self._fallback_gap_filling(missing_items, research_data, context)
             
             # Use gap_data_tool to fill missing data
@@ -72,12 +77,10 @@ class GapAgent(MemoryEnhancedBaseAgent):
                 "max_queries_per_item": 2
             }
             
-            print(f"[GAP_AGENT] 📤 Calling {tool_name} with {len(missing_items)} missing items...")
             gap_result = self.graph_bridge.execute_tool(tool_name, gap_args)
-            print(f"[GAP_AGENT] 📥 Gap tool result: {gap_result.get('status', 'unknown')}")
             
             if gap_result.get("status") == "success":
-                # -------- Robust patch extraction (handles all known shapes) --------
+                # Extract patches from gap tool response (handles all known shapes)
                 def _extract_patches(resp: Dict[str, Any]) -> Dict[str, Any]:
                     # Preferred: top-level 'patched' (full patched snapshot)
                     patched = resp.get("patched")
@@ -110,26 +113,16 @@ class GapAgent(MemoryEnhancedBaseAgent):
                 filled_data = gap_result.get("result", {}) or {}
                 patches = _extract_patches(gap_result)
                 items = _extract_items(gap_result)
-                # -------------------------------------------------------------------
-
-                print(f"[GAP_AGENT] ✅ Gap filling successful!")
-                print(f"[GAP_AGENT] 📊 Results: {len(items)} items filled")
-                print(f"[GAP_AGENT] 🔧 Patches: {len(patches)} patches to apply")
                 
-                # Apply patches to research data (mutates nested dict; coordinator reads same object)
+                # Apply patches to research data (mutates shared object)
                 applied_count = 0
                 if patches:
-                    print(f"[GAP_AGENT] 🔄 Applying {len(patches)} patches to research data...")
                     self._apply_patches(research_data, patches)
                     # Keep context.shared_data['research_data'] reference aligned
                     context.shared_data["research_data"] = research_data
                     applied_count = len(patches)
-                    print(f"[GAP_AGENT] ✅ Patches applied successfully!")
-                else:
-                    print(f"[GAP_AGENT] ⚠️ No patches to apply")
                 
                 self.update_status("completed")
-                print(f"[GAP_AGENT] 🎉 Gap filling completed successfully!")
                 return {
                     "status": "success",
                     "agent_id": self.agent_id,
@@ -138,22 +131,17 @@ class GapAgent(MemoryEnhancedBaseAgent):
                     "gap_data": filled_data
                 }
             else:
-                # ---- Soft-fallback to break loops and keep pipeline moving ----
+                # Soft-fallback to break loops and keep pipeline moving
                 err = gap_result.get("error", "Unknown gap filling error")
-                print("[GAP_AGENT] ❌ Gap filling failed:")
-                print(f"  • error: {err}")
-                print(f"  • missing_items_count: {len(missing_items)}")
-                print(f"  • first_missing_item: {missing_items[0] if missing_items else '—'}")
                 synthesized_patches = {}
                 for m in missing_items:
                     path = m.get("path")
                     if not path:
                         continue
-                    # neutral containers (lists for plural-ish paths, dict otherwise)
+                    # Create neutral containers (lists for plural paths, dict otherwise)
                     leaf = [] if any(k in path for k in ["poi","restaurants","fares","items","list","prices"]) else {}
                     synthesized_patches[path] = leaf
                 if synthesized_patches:
-                    print(f"[GAP_AGENT] 🩹 Applying synthesized patches for {len(synthesized_patches)} paths to unblock flow")
                     self._apply_patches(research_data, synthesized_patches)
                     context.shared_data["research_data"] = research_data
                 self.update_status("error")
@@ -166,8 +154,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
                 }
                 
         except Exception as e:
-            # ---- Same soft-fallback on exceptions ----
-            print(f"[GAP_AGENT] ❌ Exception during gap filling: {e}")
             synthesized_patches = {}
             for m in missing_items:
                 path = m.get("path")
@@ -176,7 +162,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
                 leaf = [] if any(k in path for k in ["poi","restaurants","fares","items","list","prices"]) else {}
                 synthesized_patches[path] = leaf
             if synthesized_patches:
-                print(f"[GAP_AGENT] 🩹 Applying synthesized patches after exception for {len(synthesized_patches)} paths")
                 self._apply_patches(research_data, synthesized_patches)
                 context.shared_data["research_data"] = research_data
             self.update_status("error")
@@ -202,7 +187,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
         missing_items: List[Dict[str, Any]] = []
 
         tool_plan = planning_data.get("tool_plan", [])
-        print(f"[DEBUG] Gap detection - tool plan (for info): {tool_plan}")
 
         # Build done_tools from data actually present in research_data
         # Use dot notation format expected by gap detection functions
@@ -229,45 +213,28 @@ class GapAgent(MemoryEnhancedBaseAgent):
         if isinstance(research_data, dict) and "restaurants" in research_data and isinstance(research_data["restaurants"], dict):
             state["restaurants"] = research_data["restaurants"] if "names_by_city" in research_data["restaurants"] else {"names_by_city": research_data["restaurants"]}
 
-        print(f"[DEBUG] Gap detection - checking for missing data in state with keys: {list(state.keys())}")
 
         try:
             if "fares.city" in done_tools:
                 city_fares_missing = _missing_city_fares(state); missing_items.extend(city_fares_missing)
-                print(f"[DEBUG] City fares missing items: {len(city_fares_missing)}")
-            else:
-                print(f"[DEBUG] Skipping city fares gap detection - not done yet")
 
             if "fares.intercity" in done_tools:
                 intercity_missing = _missing_intercity(state); missing_items.extend(intercity_missing)
-                print(f"[DEBUG] Intercity missing items: {len(intercity_missing)}")
-            else:
-                print(f"[DEBUG] Skipping intercity fares gap detection - not done yet")
 
             if "poi.discovery" in done_tools:
                 pois_missing = _missing_pois(state); missing_items.extend(pois_missing)
-                print(f"[DEBUG] POIs missing items: {len(pois_missing)}")
-            else:
-                print(f"[DEBUG] Skipping POI gap detection - not done yet")
 
             if "restaurants.discovery" in done_tools:
                 restaurants_missing = _missing_restaurants(state); missing_items.extend(restaurants_missing)
-                print(f"[DEBUG] Restaurants missing items: {len(restaurants_missing)}")
-            else:
-                print(f"[DEBUG] Skipping restaurants gap detection - not done yet")
 
         except Exception as e:
             print(f"[DEBUG] Error in gap detection: {e}")
             import traceback; traceback.print_exc()
 
-        print(f"[DEBUG] Total missing items found: {len(missing_items)}")
-        for item in missing_items[:5]:
-            print(f"[DEBUG] Missing: {item.get('path', 'unknown')} - {item.get('description', 'no description')}")
         return missing_items
 
     def _fallback_gap_filling(self, missing_items: List[Dict[str, Any]], research_data: Dict[str, Any], context: AgentContext) -> Dict[str, Any]:
         """Fallback gap filling when the gap tool is not available"""
-        print(f"[GAP_AGENT] 🔄 Using fallback gap filling for {len(missing_items)} items")
         
         # Create basic fallback data structures
         synthesized_patches = {}
@@ -283,7 +250,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
         
         # Apply synthesized patches
         if synthesized_patches:
-            print(f"[GAP_AGENT] 🩹 Applying {len(synthesized_patches)} synthesized patches")
             self._apply_patches(research_data, synthesized_patches)
             context.shared_data["research_data"] = research_data
         
@@ -298,7 +264,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
     def _apply_patches(self, data: Dict[str, Any], patches: Dict[str, Any]) -> None:
         """Apply patches to the data structure with support for array indexing"""
         for path, value in patches.items():
-            print(f"[GAP_AGENT] 🔧 Applying patch: {path} = {value}")
             try:
                 # Parse path with support for array indexing like [name=Eiffel Tower]
                 keys = self._parse_path(path)
@@ -358,8 +323,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
                     # Not expected as terminal token; ignore gracefully
                     pass
                 
-                print(f"[GAP_AGENT] ✅ Successfully applied patch to {path}")
-                
             except Exception as e:
                 print(f"[GAP_AGENT] ❌ Failed to apply patch {path}: {e}")
     
@@ -408,7 +371,7 @@ class GapAgent(MemoryEnhancedBaseAgent):
         
         return keys
     
-    # --- Message-based API kept for compatibility (not used by coordinator path now) ---
+    # Message-based API kept for compatibility (not used by coordinator path now)
 
     def process_message(self, message: AgentMessage) -> Optional[AgentMessage]:
         """Process incoming messages"""
@@ -421,22 +384,17 @@ class GapAgent(MemoryEnhancedBaseAgent):
     def handle_gap_fill_request(self, message: AgentMessage) -> Optional[AgentMessage]:
         """Handle gap filling requests (legacy message path)"""
         self.update_status("working")
-        print(f"[GAP_AGENT] 🚀 Starting gap filling task via message...")
         content = message.content
         
         missing_items = content.get("missing_items", [])
         current_state = content.get("current_state", {})
         user_message = content.get("user_message", "")
         
-        print(f"[GAP_AGENT] 📊 Found {len(missing_items)} missing items to fill")
-        
         MAX_ITEMS_TO_FILL = 8
         if len(missing_items) > MAX_ITEMS_TO_FILL:
-            print(f"[GAP_AGENT] ⚠️ Limiting to {MAX_ITEMS_TO_FILL} items")
             missing_items = missing_items[:MAX_ITEMS_TO_FILL]
         
         if not missing_items:
-            print(f"[GAP_AGENT] ✅ No missing data identified - nothing to fill")
             return self.send_message(
                 recipient=message.sender,
                 message_type="gap_fill_complete",
@@ -457,12 +415,9 @@ class GapAgent(MemoryEnhancedBaseAgent):
             "max_results_per_query": 1
         }
         
-        print(f"[GAP_AGENT] 📤 Calling gap_data_tool with {len(missing_items)} missing items...")
         result = self.graph_bridge.execute_tool("gap_data", gap_args)
-        print(f"[GAP_AGENT] 📥 Gap tool result: {result.get('status', 'unknown')}")
         
         if result.get("status") == "error":
-            print(f"[GAP_AGENT] ❌ Gap filling failed but preventing recursion")
             return self.send_message(
                 recipient=message.sender,
                 message_type="gap_fill_complete",
@@ -483,7 +438,6 @@ class GapAgent(MemoryEnhancedBaseAgent):
         filled_items = gap_result.get("items", [])
         errors = gap_result.get("errors", [])
         
-        print(f"[GAP_AGENT] ✅ Gap filling successful (message path)")
         return self.send_message(
             recipient=message.sender,
             message_type="gap_fill_complete",

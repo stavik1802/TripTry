@@ -155,10 +155,12 @@ try {
 export default function App(): JSX.Element {
   const [query, setQuery] = useState<string>("Plan a 4-day NYC food trip for 2 adults next month. Include two dinner picks per day.");
   const [userId, setUserId] = useState<string>("stav");
+  const [isNewSession, setIsNewSession] = useState<boolean>(true);
+  const [sessionId, setSessionId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [result, setResult] = useState<ApiResult | null>(null);
-  const [history, setHistory] = useLocalStorage<Array<{ ts: number; query: string; ok: boolean }>>("trip-ui:history", []);
+  const [history, setHistory] = useLocalStorage<Array<{ ts: number; query: string; ok: boolean; sessionId?: string }>>("trip-ui:history", []);
 
   const controllerRef = useRef<AbortController | null>(null);
 
@@ -171,13 +173,24 @@ export default function App(): JSX.Element {
       const res = await fetch(`${API_BASE}/process`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_request: query, user_id: userId || undefined }),
+        body: JSON.stringify({ 
+          user_request: query, 
+          user_id: userId || undefined,
+          session_id: sessionId || undefined 
+        }),
         signal: controllerRef.current.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: ApiResult = await res.json();
       setResult(data);
-      setHistory(([...history, { ts: Date.now(), query, ok: true }]).slice(-12));
+      
+      // Update session ID if we got one back
+      if (data.session_id && data.session_id !== sessionId) {
+        setSessionId(data.session_id);
+        setIsNewSession(false);
+      }
+      
+      setHistory(([...history, { ts: Date.now(), query, ok: true, sessionId: data.session_id }]).slice(-12));
     } catch (err: unknown) {
       const message = (err && (err as any).message) || String(err);
       setError(message);
@@ -203,17 +216,96 @@ export default function App(): JSX.Element {
             <input
               className="flex-1 rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-100"
               value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="user123"
+              onChange={(e) => {
+                setUserId(e.target.value);
+                if (e.target.value !== userId) {
+                  setIsNewSession(true);
+                  setSessionId("");
+                }
+              }}
+              placeholder="User ID (e.g., stav)"
             />
-            <Button type="submit" disabled={loading || !query.trim()}>
+            <input
+              className="flex-1 rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-100"
+              value={sessionId}
+              onChange={(e) => setSessionId(e.target.value)}
+              placeholder="Session ID (for follow-ups)"
+            />
+            <Button 
+              type="submit" 
+              disabled={loading || !query.trim()}
+              onClick={() => setIsNewSession(false)}
+            >
               {loading ? <Spinner /> : "Run"}
+            </Button>
+            <Button 
+              type="button" 
+              onClick={() => {
+                setSessionId("");
+                setIsNewSession(true);
+                setResult(null);
+                setError("");
+              }}
+              disabled={loading}
+              className="bg-green-600 text-white hover:bg-green-700"
+            >
+              New Session
             </Button>
           </div>
         </form>
 
         {error ? (
           <div className="text-rose-600 font-mono text-sm mb-4">{error}</div>
+        ) : null}
+
+        {/* Session Info */}
+        {sessionId ? (
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-3 mb-4">
+            <div className="text-sm text-blue-800">
+              <strong>Session ID:</strong> {sessionId}
+              <br />
+              <strong>User ID:</strong> {userId}
+              <br />
+              <strong>Status:</strong> {isNewSession ? "New conversation" : "Active conversation - you can ask follow-up questions!"}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-3 mb-4">
+            <div className="text-sm text-gray-700">
+              <strong>User ID:</strong> {userId}
+              <br />
+              <strong>Status:</strong> Ready to start a new conversation
+            </div>
+          </div>
+        )}
+
+        {/* Follow-up Examples */}
+        {result && !loading ? (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 mb-4">
+            <div className="text-sm text-yellow-800 mb-2">
+              <strong>Try these follow-up questions:</strong>
+            </div>
+            <div className="space-y-1 text-xs">
+              <button 
+                className="block text-left text-blue-600 hover:text-blue-800 underline"
+                onClick={() => setQuery("Can you add more restaurant recommendations?")}
+              >
+                • Can you add more restaurant recommendations?
+              </button>
+              <button 
+                className="block text-left text-blue-600 hover:text-blue-800 underline"
+                onClick={() => setQuery("What about the budget breakdown?")}
+              >
+                • What about the budget breakdown?
+              </button>
+              <button 
+                className="block text-left text-blue-600 hover:text-blue-800 underline"
+                onClick={() => setQuery("Show me transportation options between cities")}
+              >
+                • Show me transportation options between cities
+              </button>
+            </div>
+          </div>
         ) : null}
 
         {/* Show only the response_text */}

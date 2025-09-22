@@ -1,9 +1,28 @@
-# Memory-Enhanced Base Agent with Learning Capabilities
+"""
+Memory-Enhanced Base Agent for TripPlanner Multi-Agent System
+
+This module provides an enhanced base agent that integrates memory, learning, and caching
+capabilities. It extends the basic BaseAgent with sophisticated memory management,
+performance tracking, user preference learning, and result caching for improved efficiency.
+
+Key features:
+- Integrated memory system with episodic, semantic, and procedural memory
+- Performance tracking and learning from interactions
+- User preference extraction and learning
+- Result caching with TTL for improved response times
+- Error learning and analysis for system improvement
+- Context enhancement with learned preferences
+
+The agent automatically learns from each interaction, stores relevant memories,
+and applies learned preferences to improve future responses.
+"""
+
 from typing import Any, Dict, List, Optional
 from .base_agent import BaseAgent, AgentMessage, AgentContext
-from .memory_system import MemorySystem
+from app.agents.utils.memory_system import MemorySystem
 from datetime import datetime
 import time
+import copy  # For safe result annotation when using cache
 
 class MemoryEnhancedBaseAgent(BaseAgent):
     """Base agent with integrated memory and learning capabilities"""
@@ -16,12 +35,26 @@ class MemoryEnhancedBaseAgent(BaseAgent):
         self.learning_enabled = True
     
     def execute_task_with_learning(self, context: AgentContext, task_type: str = "general") -> Dict[str, Any]:
-        """Execute task with integrated learning"""
+        """Execute task with integrated learning and cache reuse."""
         start_time = time.time()
+        user_id = context.shared_data.get("user_id", "anonymous")
+
+        # Try cached result first (deep-copied for safety)
+        cached = self.memory_system.load_cached_result(
+            user_id=user_id,
+            task_type=task_type,
+            user_request=context.user_request,
+            max_age_hours=24,   # change to your preferred TTL
+        )
+        if cached:
+            reused = copy.deepcopy(cached)
+            if isinstance(reused, dict):
+                reused.setdefault("_meta", {})["_reused_from_cache"] = True
+            return reused
         
         try:
             # Retrieve relevant memories
-            relevant_memories = self._retrieve_relevant_memories(context, task_type)
+            _ = self._retrieve_relevant_memories(context, task_type)
             
             # Execute task
             result = self.execute_task(context)
@@ -30,12 +63,26 @@ class MemoryEnhancedBaseAgent(BaseAgent):
             response_time = time.time() - start_time
             success = result.get("status") == "success"
             
-            # Learn from interaction
+            # Learn from interaction if enabled
             if self.learning_enabled:
                 self._learn_from_interaction(task_type, success, response_time, context, result)
             
             # Store episodic memory
             self._store_episodic_memory(task_type, success, context, result)
+
+            # Save to cache if successful
+            if success:
+                try:
+                    self.memory_system.save_cached_result(
+                        agent_id=self.agent_id,
+                        user_id=user_id,
+                        task_type=task_type,
+                        user_request=context.user_request,
+                        result=result,
+                    )
+                except Exception:
+                    # Cache failure should not break main flow
+                    pass
             
             return result
             
@@ -62,8 +109,16 @@ class MemoryEnhancedBaseAgent(BaseAgent):
             tags=[task_type],
             limit=3
         )
+
+        # Get global semantic preferences (no agent filter)
+        semantic_prefs = self.memory_system.retrieve_memories(
+            agent_id=None,                 # Critical: do not filter by agent
+            memory_type="semantic",
+            tags=[user_id],
+            limit=5
+        )
         
-        return user_memories + procedural_memories
+        return user_memories + procedural_memories + semantic_prefs
     
     def _learn_from_interaction(self, task_type: str, success: bool, response_time: float, 
                               context: AgentContext, result: Dict[str, Any]):
@@ -85,7 +140,8 @@ class MemoryEnhancedBaseAgent(BaseAgent):
     def _learn_from_error(self, task_type: str, error_message: str, 
                          response_time: float, context: AgentContext):
         """Learn from errors"""
-        # Store error memory
+        user_id = context.shared_data.get("user_id", "anonymous")
+        # Include user_id in tags for follow-up retrieval
         self.memory_system.store_memory(
             agent_id=self.agent_id,
             memory_type="episodic",
@@ -96,7 +152,7 @@ class MemoryEnhancedBaseAgent(BaseAgent):
                 "learning_type": "error_analysis"
             },
             importance=0.8,
-            tags=["error", task_type, "learning"]
+            tags=["error", task_type, "learning", user_id]  # Added user_id for retrieval
         )
         
         # Update performance metrics
@@ -112,6 +168,7 @@ class MemoryEnhancedBaseAgent(BaseAgent):
                              context: AgentContext, result: Dict[str, Any]):
         """Store episodic memory of the interaction"""
         importance = 0.7 if success else 0.9  # Errors are more important to remember
+        user_id = context.shared_data.get("user_id", "anonymous")
         
         self.memory_system.store_memory(
             agent_id=self.agent_id,
@@ -124,7 +181,7 @@ class MemoryEnhancedBaseAgent(BaseAgent):
                 "timestamp": datetime.now().isoformat()
             },
             importance=importance,
-            tags=[task_type, "success" if success else "error"]
+            tags=[task_type, "success" if success else "error", user_id]  # Added user_id for retrieval
         )
     
     def _extract_and_learn_preferences(self, user_id: str, context: AgentContext, result: Dict[str, Any]):
@@ -144,7 +201,7 @@ class MemoryEnhancedBaseAgent(BaseAgent):
         if "activities" in result:
             preferences["activity_preference"] = result["activities"]
         
-        # Store learned preferences
+        # Store learned preferences in memory system
         for pref_type, pref_value in preferences.items():
             self.memory_system.learn_user_preference(
                 user_id=user_id,
@@ -172,7 +229,7 @@ class MemoryEnhancedBaseAgent(BaseAgent):
         
         preferences = self.get_user_preferences(user_id)
         
-        # Merge preferences into context
+        # Merge preferences into context for enhanced processing
         enhanced_context = AgentContext(
             session_id=context.session_id,
             user_request=context.user_request,

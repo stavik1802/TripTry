@@ -1,9 +1,28 @@
-# Research Agent - Coordinates discovery tools
+"""
+Research Agent for TripPlanner Multi-Agent System
+
+This agent coordinates the discovery and data gathering phase by executing various
+research tools to collect comprehensive information about destinations, attractions,
+restaurants, and transportation options.
+
+Key responsibilities:
+- Execute discovery tools based on planning agent's tool plan
+- Gather city recommendations and destination information
+- Discover Points of Interest (POIs) and attractions
+- Research restaurants and dining options
+- Collect transportation fares (city and intercity)
+- Validate and structure collected research data
+
+The agent systematically executes research tools in parallel to gather all
+necessary information for trip planning, ensuring comprehensive data collection
+for the budget and optimization phases.
+"""
+
 from typing import Any, Dict, List, Optional
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
 from .base_agent import AgentContext
-from .graph_integration import AgentGraphBridge
-from .common_schema import AgentDataSchema
+from app.agents.utils.graph_integration import AgentGraphBridge
+from app.core.common_schema import AgentDataSchema
 
 class ResearchAgent(MemoryEnhancedBaseAgent):
     """Agent responsible for gathering information using discovery tools"""
@@ -23,11 +42,6 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
         # PATCH #1: Read tool_plan only from planning_data (persisted), not from a top-level transient key
         tool_plan = list(set(planning_data.get("tool_plan", [])))
         
-        print(f"[DEBUG] Research agent received planning_data: {list(planning_data.keys()) if planning_data else 'None'}")
-        print(f"[DEBUG] Research agent shared_data keys: {list(context.shared_data.keys())}")
-        print(f"[DEBUG] Planning data countries: {planning_data.get('countries', [])}")
-        print(f"[DEBUG] Planning data cities: {planning_data.get('cities', [])}")
-        print(f"[DEBUG] Tool plan: {tool_plan}")
         
         research_results: Dict[str, Any] = {}
         
@@ -54,10 +68,8 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
             
             # Only discover cities if we still don't have them and city_recommender is in the tool plan
             if not research_results.get("cities") and "city_recommender" in tool_plan:
-                print(f"[DEBUG] Cities recommender in tool plan - discovering cities")
                 # Use cities from planning data if available, otherwise discover cities
                 if planning_data.get("cities"):
-                    print(f"[DEBUG] Using cities from planning data")
                     # Use cities from planning data
                     research_results["cities"] = planning_data.get("cities", [])
                     # Build city_country_map from planning data
@@ -66,83 +78,56 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
                         country = countries[0].get("country", "Unknown")
                         research_results["city_country_map"] = {city: country for city in research_results["cities"]}
                 elif planning_data.get("countries"):
-                    print(f"[DEBUG] Discovering cities from countries")
                     # Discover cities if not specified in planning data
                     cities_data = self._discover_cities(planning_data)
                     if cities_data.get("cities"):
                         research_results["cities"] = cities_data.get("cities", [])
                         research_results["city_country_map"] = cities_data.get("city_country_map", {})
-                else:
-                    print(f"[DEBUG] No cities or countries found in planning data")
             else:
                 # For specific intents that need cities but don't use cities.recommender
                 # Extract city directly from planning data
                 intent = planning_data.get("intent", "")
                 if intent in ["city_fares", "poi_lookup", "restaurants_nearby"]:
-                    print(f"[DEBUG] {intent} intent detected - extracting city from planning data")
                     countries = planning_data.get("countries", [])
                     if countries and countries[0].get("cities"):
                         city = countries[0]["cities"][0]  # Take first city
                         country = countries[0].get("country", "Unknown")
                         research_results["cities"] = [city]
                         research_results["city_country_map"] = {city: country}
-                        print(f"[DEBUG] Using city: {city} in {country}")
-                    else:
-                        print(f"[DEBUG] No city found in planning data for {intent}")
-                else:
-                    print(f"[DEBUG] No city discovery needed for intent: {intent}")
             
             # Execute tools based on intent and tool plan
             
             # Only execute tools that are in the tool plan
             if research_results.get("cities"):
                 if "poi_discovery" in tool_plan:
-                    print(f"[DEBUG] Executing POI discovery")
                     pois_data = self._discover_pois(planning_data, research_results)
-                    print(f"[DEBUG] POI discovery result: {pois_data}")
                     if pois_data.get("poi_by_city"):
                         research_results["poi"] = {"poi_by_city": pois_data.get("poi_by_city", {})}
-                        print(f"[DEBUG] POI data stored: {len(research_results['poi']['poi_by_city'])} cities")
-                    else:
-                        print(f"[DEBUG] No POI data found")
                 
                 if "restaurants_discovery" in tool_plan:
-                    print(f"[DEBUG] Executing restaurant discovery")
                     restaurants_data = self._discover_restaurants(planning_data, research_results)  # PATCH #3 handled in helper
-                    print(f"[DEBUG] Restaurant discovery result: {restaurants_data}")
                     if restaurants_data.get("names_by_city"):
                         research_results["restaurants"] = {
                             "names_by_city": restaurants_data.get("names_by_city", {}),
                             "links_by_city": restaurants_data.get("links_by_city", {}),
                             "details_by_city": restaurants_data.get("details_by_city", {})
                         }
-                        print(f"[DEBUG] Restaurant data stored: {len(research_results['restaurants']['names_by_city'])} cities")
-                    else:
-                        print(f"[DEBUG] No restaurant data found")
                 
                 if "city_fare" in tool_plan:
-                    print(f"[DEBUG] Executing city fares")
                     city_fares_data = self._gather_city_fares(planning_data, research_results)
-                    print(f"[DEBUG] City fares result: {city_fares_data}")
                     if city_fares_data.get("city_fares"):
                         research_results["city_fares"] = {"city_fares": city_fares_data.get("city_fares", {})}
-                        print(f"[DEBUG] City fares data stored: {len(research_results['city_fares']['city_fares'])} cities")
-                    else:
-                        print(f"[DEBUG] No city fares data found")
                 
                 if "intercity_fare" in tool_plan:
-                    print(f"[DEBUG] Executing intercity fares")
                     intercity_fares_data = self._gather_intercity_fares(planning_data, research_results)
-                    print(f"[DEBUG] Intercity fares result: {intercity_fares_data}")
-                    if intercity_fares_data.get("intercity"):
+                    # Handle both data structures: direct 'hops' or nested 'intercity.hops'
+                    if intercity_fares_data.get("hops"):
+                        research_results["intercity"] = {"hops": intercity_fares_data.get("hops", {})}
+                    elif intercity_fares_data.get("intercity"):
                         research_results["intercity"] = {"hops": intercity_fares_data.get("intercity", {}).get("hops", [])}
-                        print(f"[DEBUG] Intercity fares data stored: {len(research_results['intercity']['hops'])} routes")
-                    else:
-                        print(f"[DEBUG] No intercity fares data found")
             
             # Always try to get currency data if needed
             if "currency" in tool_plan:
-                print(f"[DEBUG] Executing currency data")
                 currency_data = self._gather_currency_data(planning_data)
                 if currency_data.get("fx"):
                     research_results["fx"] = currency_data.get("fx", {})
@@ -184,7 +169,6 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
         for c in plan_data.get("countries", []):
             countries.append({"country": c.get("country", c.get("name", ""))})
         
-        print(f"[DEBUG] City discovery - countries: {countries}")
         
         args = {
             "countries": countries,
@@ -194,10 +178,8 @@ class ResearchAgent(MemoryEnhancedBaseAgent):
             "preferences": plan_data.get("preferences", {})
         }
         
-        print(f"[DEBUG] City discovery - args: {args}")
         
         result = self.graph_bridge.execute_tool("city_recommender", args)
-        print(f"[DEBUG] City discovery - result: {result}")
         
         if result.get("status") == "success":
             return result["result"]

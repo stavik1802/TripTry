@@ -1,8 +1,0 @@
-[interpret] intent=plan_trip plan=['cities.recommender', 'fx.oracle']
-[route] → cities.recommender
-[cities.recommender] ERROR: No cities found for the given countries. Try different inputs.
-[replan] next=['fx.oracle']
-[route] → fx.oracle
-[fx.oracle] ok
-[replan] next=[]
-[router] no plan and goal not satisfied → END

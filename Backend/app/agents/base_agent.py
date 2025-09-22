@@ -1,4 +1,20 @@
-# Base Agent Class for Multi-Agent System
+"""
+Base Agent Framework for TripPlanner Multi-Agent System
+
+This module provides the foundational framework for all agents in the TripPlanner
+multi-agent system. It defines the base classes, communication protocols, and
+core functionality that all specialized agents inherit from.
+
+The module includes:
+- BaseAgent: Abstract base class defining the agent interface and common functionality
+- AgentMessage: Message structure for inter-agent communication
+- AgentContext: Shared context and data structure for agent coordination
+- AgentCommunication: Centralized communication hub for message routing
+
+This framework enables consistent agent behavior, standardized communication,
+and provides the foundation for building specialized agents with specific capabilities.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
@@ -71,7 +87,6 @@ class BaseAgent(ABC):
     def update_status(self, status: str):
         """Update agent status"""
         self.status = status
-        print(f"[{self.agent_id}] Status: {status}")
     
     def log_activity(self, activity: str, details: Dict[str, Any] = None):
         """Log agent activity"""
@@ -82,7 +97,6 @@ class BaseAgent(ABC):
             "details": details or {}
         }
         self.memory[f"activity_{len(self.memory)}"] = log_entry
-        print(f"[{self.agent_id}] {activity}")
 
 class AgentCommunication:
     """Centralized communication hub for agents"""
@@ -95,7 +109,6 @@ class AgentCommunication:
     def register_agent(self, agent: BaseAgent):
         """Register an agent with the communication hub"""
         self.agents[agent.agent_id] = agent
-        print(f"Registered agent: {agent.agent_id} ({agent.agent_type})")
     
     def send_message(self, message: AgentMessage):
         """Send a message between agents"""
@@ -106,7 +119,6 @@ class AgentCommunication:
                 self.message_history.append(response)
             return response
         else:
-            print(f"Warning: Agent {message.recipient} not found")
             return None
     
     def broadcast_message(self, sender: str, message_type: str, content: Dict[str, Any], exclude: List[str] = None):

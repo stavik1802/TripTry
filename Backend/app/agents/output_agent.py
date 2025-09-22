@@ -1,8 +1,26 @@
-# Output Agent - AI-powered human-like response generation (FULL-DUMP EDITION)
+"""
+Output Agent for TripPlanner Multi-Agent System
+
+This agent generates the final human-readable response by synthesizing all the data
+collected from other agents. It transforms structured data into natural language
+responses, JSON outputs, and formatted reports for users.
+
+Key responsibilities:
+- Synthesize data from planning, research, and budget agents
+- Generate AI-powered human-like responses using OpenAI
+- Format outputs in multiple formats (JSON, markdown, text, HTML)
+- Create comprehensive trip reports with detailed itineraries
+- Handle fallback responses when AI services are unavailable
+
+The agent combines all agent outputs into a cohesive, user-friendly response
+that provides complete trip planning information with budgets, itineraries,
+and recommendations.
+"""
+
 from typing import Any, Dict, Optional, List
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
 from .base_agent import AgentMessage, AgentContext
-from .common_schema import AgentDataSchema
+from app.core.common_schema import AgentDataSchema
 from datetime import datetime
 import os
 import json
@@ -76,18 +94,15 @@ class OutputAgent(MemoryEnhancedBaseAgent):
         """Generate AI-powered human-like response using OpenAI with improved error handling"""
 
         if OpenAI is None:
-            print("[DEBUG] OpenAI not available, using fallback response")
             return self._fallback_response(planning_data, research_data, budget_data, trip_data)
 
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
-            print("[DEBUG] OpenAI API key not found, using fallback response")
             return self._fallback_response(planning_data, research_data, budget_data, trip_data)
 
         try:
             client = OpenAI(api_key=api_key)
         except Exception as e:
-            print(f"[DEBUG] OpenAI client creation failed: {e}")
             return self._fallback_response(planning_data, research_data, budget_data, trip_data)
 
         # 1) Normalize & summarize
@@ -110,18 +125,8 @@ class OutputAgent(MemoryEnhancedBaseAgent):
         # 3) Prompt
         prompt, max_tokens, response_style = self._create_response_prompt(user_request, data_summary, llm_packet)
 
-        # Debug overview (no slicing)
-        print("[DEBUG] NORMALIZED SUMMARY COUNTS:",
-              json.dumps({
-                  "cities": len(data_summary.get("cities", [])),
-                  "pois": {k: len(v or []) for k, v in (data_summary.get("pois") or {}).items()},
-                  "restaurants": {k: len(v or []) for k, v in (data_summary.get("restaurants") or {}).items()},
-                  "city_fares": len(data_summary.get("city_fares") or {}),
-                  "intercity": len(data_summary.get("intercity_fares") or {}),
-              }, ensure_ascii=False))
 
         try:
-            print("[DEBUG] Making OpenAI API call...")
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[

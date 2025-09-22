@@ -1,9 +1,26 @@
-# Planning Agent - Interprets user requests and creates plans
+"""
+Planning Agent for TripPlanner Multi-Agent System
+
+This agent serves as the entry point for user requests, interpreting natural language
+queries and creating structured execution plans. It analyzes user intent, extracts
+key information, and determines which tools and agents are needed for the request.
+
+Key responsibilities:
+- Interpret natural language user requests using AI
+- Extract key information (destinations, dates, budget, preferences)
+- Create tool execution plans based on user requirements
+- Map interpreter tools to legacy tool names for compatibility
+- Coordinate the overall workflow by setting up initial context
+
+The agent uses AI-powered interpretation to understand user intent and creates
+a structured plan that guides the entire multi-agent workflow.
+"""
+
 from typing import Any, Dict, List, Optional
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
 from .base_agent import AgentContext
-from .graph_integration import AgentGraphBridge
-from .common_schema import STANDARD_TOOL_NAMES, AgentDataSchema
+from app.agents.utils.graph_integration import AgentGraphBridge
+from app.core.common_schema import STANDARD_TOOL_NAMES, AgentDataSchema
 
 # --- Mapping from the interpreter's 6 canonical tools → legacy tool ids used elsewhere ---
 _INTERPRETER_TO_LEGACY = {
@@ -43,15 +60,51 @@ class PlanningAgent(MemoryEnhancedBaseAgent):
         self.dependencies = []  # This agent doesn't depend on others initially
         self.graph_bridge = AgentGraphBridge()
     
+    def _build_contextual_request(self, context: AgentContext) -> str:
+        """Build enhanced request with conversation history for better context understanding"""
+        user_request = context.user_request
+        conversation_history = context.conversation_history
+        
+        # If no conversation history, return original request
+        if not conversation_history:
+            return user_request
+        
+        # Build context from previous conversations
+        context_parts = []
+        for turn in conversation_history[-3:]:  # Last 3 turns for context
+            if turn.get("user_request"):
+                context_parts.append(f"Previous request: {turn['user_request']}")
+            if turn.get("agent_response") and turn["agent_response"].get("response_text"):
+                # Extract key info from previous response
+                response_preview = turn["agent_response"]["response_text"][:200]
+                context_parts.append(f"Previous response: {response_preview}...")
+        
+        # Combine context with current request
+        if context_parts:
+            context_str = "\n".join(context_parts)
+            enhanced_request = f"""Previous conversation context:
+{context_str}
+
+Current request: {user_request}
+
+Please interpret the current request considering the conversation context above."""
+            print(f"[DEBUG] Planning agent - enhanced request with context: {enhanced_request[:300]}...")
+            return enhanced_request
+        
+        return user_request
+    
     def execute_task(self, context: AgentContext) -> Dict[str, Any]:
         """Execute planning task"""
         self.update_status("working")
         
         user_request = context.user_request
         
+        # Build enhanced request with conversation history for context
+        enhanced_request = self._build_contextual_request(context)
+        
         try:
-            # Use the interpreter tool through the bridge
-            interpreter_result = self.graph_bridge.execute_tool("interpreter", {"user_request": user_request})
+            # Use the interpreter tool through the bridge with enhanced context
+            interpreter_result = self.graph_bridge.execute_tool("interpreter", {"user_request": enhanced_request})
             
             if interpreter_result.get("status") == "error":
                 return {
@@ -62,8 +115,6 @@ class PlanningAgent(MemoryEnhancedBaseAgent):
             
             interpretation = interpreter_result.get("result")
             
-            print(f"[DEBUG] Planning agent - interpreter result: {interpreter_result}")
-            print(f"[DEBUG] Planning agent - interpretation: {interpretation}")
             
             # Handle case where interpretation might not have model_dump method
             if hasattr(interpretation, 'model_dump'):
@@ -71,7 +122,6 @@ class PlanningAgent(MemoryEnhancedBaseAgent):
             else:
                 plan_data = interpretation if isinstance(interpretation, dict) else {"intent": "unknown"}
             
-            print(f"[DEBUG] Planning agent - plan_data: {plan_data}")
             
             # Ensure a flat 'cities' list (union of countries[].cities) for downstream agents/tests
             if not plan_data.get("cities"):
@@ -80,7 +130,6 @@ class PlanningAgent(MemoryEnhancedBaseAgent):
             # Prefer the interpreter's tool_plan mapped to legacy names used by other agents/tests
             legacy_tool_plan = _map_interpreter_tools_to_legacy(plan_data.get("tool_plan", []))
 
-            print(f"[DEBUG] Planning agent - legacy_tool_plan: {legacy_tool_plan}")
 
             # Fallback to legacy builder if the interpreter didn't choose tools
             if not legacy_tool_plan:

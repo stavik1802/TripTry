@@ -1,4 +1,20 @@
-# LangGraph State for Multi-Agent System
+"""
+Agent State Management for TripPlanner Multi-Agent System
+
+This module defines the core data structures and state management for the TripPlanner
+multi-agent system. It provides the foundation for agent communication, status tracking,
+memory management, and coordination within the LangGraph workflow.
+
+The module includes:
+- AgentMessage: Enhanced message structure for inter-agent communication
+- AgentStatus: Agent status tracking with progress and error handling
+- AgentMemory: Agent memory and context management
+- AgentState: Main LangGraph state for multi-agent coordination
+
+These structures enable sophisticated coordination, communication, and state management
+across the entire multi-agent workflow.
+"""
+
 from typing import Any, Dict, List, Optional, TypedDict, Annotated
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -54,6 +70,7 @@ class AgentState(TypedDict):
     research_data: Dict[str, Any]
     budget_data: Dict[str, Any]
     final_response: Optional[str]
+    user_id: str  = "anonymous"
     
     # Coordination control
     current_agent: str

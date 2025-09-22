@@ -1,9 +1,26 @@
-# Budget Agent - Handles cost calculation and optimization
+"""
+Budget Agent for TripPlanner Multi-Agent System
+
+This agent handles cost calculation, budget optimization, and trip financial planning.
+It processes research data to calculate costs, optimize itineraries, and create detailed
+trip plans with budget breakdowns.
+
+Key responsibilities:
+- Calculate costs using discoveries_costs tool
+- Create city graphs with geocost data
+- Optimize itineraries for cost efficiency
+- Generate complete trip plans with budget details
+- Handle partial success scenarios gracefully
+
+The agent follows a 4-step workflow: cost calculation → city graph creation → 
+optimization → trip generation, with comprehensive error handling at each step.
+"""
+
 from typing import Any, Dict, List, Optional
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
 from .base_agent import AgentContext
-from .graph_integration import AgentGraphBridge
-from .common_schema import STANDARD_TOOL_NAMES, AgentDataSchema, CostBreakdown
+from app.agents.utils.graph_integration import AgentGraphBridge
+from app.core.common_schema import STANDARD_TOOL_NAMES, AgentDataSchema, CostBreakdown
 
 class BudgetAgent(MemoryEnhancedBaseAgent):
     """Agent responsible for budget management and cost optimization"""
@@ -22,8 +39,9 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
         research_data = context.shared_data.get("research_data", {})
         planning_data = context.shared_data.get("planning_data", {})
         
+        
         try:
-            # Validate input data
+            # Validate input data structure and types
             if not AgentDataSchema.validate_data_structure(research_data, ["cities"], "research_data"):
                 self.update_status("error")
                 return {
@@ -87,7 +105,7 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
             context.shared_data["budget_data"] = cost_data
             
             # Step 2: Create city graph using geocost_assembler
-            # PATCH: read POIs per city robustly (list or dict with 'pois')
+            # Handle POIs per city robustly (list or dict with 'pois')
             poi_by_city = research_data.get("poi", {}).get("poi_by_city", {})
             def _city_pois(city: str):
                 v = poi_by_city.get(city, [])
@@ -114,7 +132,7 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
                 }
             }
 
-            # Tool availability check (added)
+            # Check city graph tool availability
             if not AgentDataSchema.validate_tool_availability(STANDARD_TOOL_NAMES["city_graph"], self.graph_bridge.available_tools):
                 self.update_status("error")
                 return {
@@ -148,7 +166,7 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
                 }
             }
 
-            # Tool availability check (added)
+            # Check optimizer tool availability
             if not AgentDataSchema.validate_tool_availability(STANDARD_TOOL_NAMES["optimizer"], self.graph_bridge.available_tools):
                 self.update_status("error")
                 return {
@@ -184,9 +202,9 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
                 }
             }
 
-            # Tool availability check (added)
+            # Check trip maker tool availability
             if not AgentDataSchema.validate_tool_availability(STANDARD_TOOL_NAMES["trip_maker"], self.graph_bridge.available_tools):
-                # Still return other data even if trip tool is not available
+                # Return partial success with available data
                 self.update_status("completed")
                 return {
                     "status": "partial_success",
@@ -202,13 +220,8 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
             if trip_result.get("status") == "success":
                 trip_data = trip_result.get("result", {})
                 context.shared_data["trip_data"] = trip_data
-                
-                print(f"[DEBUG] Budget agent - trip_data keys: {list(trip_data.keys()) if trip_data else 'None'}")
                 if trip_data.get("request", {}).get("trip"):
                     trip = trip_data["request"]["trip"]
-                    print(f"[DEBUG] Budget agent - trip found in request.trip with keys: {list(trip.keys())}")
-                    if trip.get("days"):
-                        print(f"[DEBUG] Budget agent - trip has {len(trip['days'])} days")
                 
                 self.update_status("completed")
                 return {
@@ -220,7 +233,7 @@ class BudgetAgent(MemoryEnhancedBaseAgent):
                     "trip_data": trip_data
                 }
             else:
-                # Still return other data even if trip creation fails
+                # Return partial success with available data
                 self.update_status("completed")
                 return {
                     "status": "partial_success",

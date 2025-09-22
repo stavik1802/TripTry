@@ -1,15 +1,13 @@
 # Multi-Agent System with Memory & Learning
 from .base_agent import BaseAgent, AgentMessage, AgentContext, AgentCommunication
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
-from .memory_system import MemorySystem, MemoryEntry, LearningMetrics, UserPreference
+from app.agents.utils.memory_system import MemorySystem, MemoryEntry, LearningMetrics, UserPreference
 from .learning_agent import LearningAgent
 from .planning_agent import PlanningAgent
 from .reasearch_agent import ResearchAgent
 from .budget_agent import BudgetAgent
 from .gap_agent import GapAgent
-from .graph_integration import AgentGraphBridge
-from .agent_coordinator import AgentCoordinator
-from .advanced_multi_agent_system import AdvancedMultiAgentSystem
+from app.agents.utils.graph_integration import AgentGraphBridge
 
 __all__ = [
     "BaseAgent",
@@ -26,7 +24,5 @@ __all__ = [
     "ResearchAgent", 
     "BudgetAgent",
     "GapAgent",
-    "AgentGraphBridge",
-    "AgentCoordinator",
-    "AdvancedMultiAgentSystem"
+    "AgentGraphBridge"
 ]

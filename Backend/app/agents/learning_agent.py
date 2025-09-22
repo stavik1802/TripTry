@@ -1,8 +1,26 @@
-# Learning Agent - Specialized agent for learning and adaptation
+"""
+Learning Agent for TripPlanner Multi-Agent System
+
+This agent specializes in learning, adaptation, and system improvement. It analyzes
+performance data, learns user preferences, and provides recommendations to optimize
+the multi-agent system's effectiveness over time.
+
+Key responsibilities:
+- Analyze agent performance metrics and success rates
+- Learn user preferences from feedback and interactions
+- Generate improvement recommendations for other agents
+- Track system-wide performance and identify optimization opportunities
+- Implement reinforcement learning and pattern recognition
+
+The agent uses multiple learning strategies including reinforcement learning,
+pattern recognition, preference learning, and strategy optimization to continuously
+improve the system's performance and user experience.
+"""
+
 from typing import Any, Dict, List, Optional
 from .memory_enhanced_base_agent import MemoryEnhancedBaseAgent
 from .base_agent import AgentMessage, AgentContext
-from .memory_system import MemorySystem, LearningMetrics, UserPreference
+from app.agents.utils.memory_system import MemorySystem, LearningMetrics, UserPreference
 from datetime import datetime
 import json
 
@@ -13,7 +31,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
         super().__init__("learning_agent", "learner")
         self.capabilities = ["analyze_performance", "learn_preferences", "adapt_strategies", "recommend_improvements"]
         self.dependencies = []
-        self.memory_system = MemorySystem()
+        # self.memory_system = MemorySystem()
         self.learning_strategies = {
             "reinforcement": self._reinforcement_learning,
             "pattern_recognition": self._pattern_recognition,
@@ -42,7 +60,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
         response_time = content.get("response_time", 0.0)
         context = content.get("context", {})
         
-        # Learn from performance
+        # Learn from performance data
         self.memory_system.learn_from_interaction(
             agent_id=agent_id,
             task_type=task_type,
@@ -71,7 +89,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
         feedback_type = content.get("feedback_type")
         feedback_data = content.get("feedback_data", {})
         
-        # Extract preferences from feedback
+        # Extract preferences from user feedback
         preferences = self.extract_preferences_from_feedback(feedback_data)
         
         for pref_type, pref_value in preferences.items():
@@ -147,7 +165,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
                     "metric": f"Success rate: {metric.success_rate:.2%}"
                 })
             
-            if metric.average_response_time > 30.0:  # 30 seconds
+            if metric.average_response_time > 30.0:  # 30 seconds threshold
                 recommendations.append({
                     "type": "improve_response_time",
                     "priority": "medium",
@@ -228,7 +246,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
     def _reinforcement_learning(self, agent_id: str, task_type: str, 
                               reward: float, context: Dict[str, Any]):
         """Implement reinforcement learning"""
-        # Store reward-based learning
+        # Store reward-based learning data
         self.memory_system.store_memory(
             agent_id=agent_id,
             memory_type="procedural",
@@ -244,7 +262,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
     
     def _pattern_recognition(self, data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Recognize patterns in agent behavior"""
-        # Simple pattern recognition - can be enhanced with ML
+        # Simple pattern recognition (can be enhanced with ML)
         patterns = {}
         
         # Analyze success patterns
@@ -323,7 +341,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
             response_time = task.get("response_time", 0)
             
             # Track conditions with fast response times
-            if response_time < 10:  # Fast response
+            if response_time < 10:  # Fast response threshold
                 for key, value in context.items():
                     if key not in conditions:
                         conditions[key] = {"fast": [], "slow": []}
@@ -335,7 +353,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
         """Execute learning task"""
         self.update_status("working")
         
-        # Analyze system performance
+        # Analyze system performance metrics
         all_metrics = self.memory_system.get_learning_metrics()
         system_analysis = {
             "total_agents": len(set(k[0] for k in all_metrics.keys())),
@@ -343,7 +361,7 @@ class LearningAgent(MemoryEnhancedBaseAgent):
             "overall_performance": self._calculate_overall_performance(all_metrics)
         }
         
-        # Consolidate memories
+        # Consolidate and optimize memories
         self.memory_system.consolidate_memories()
         
         return {

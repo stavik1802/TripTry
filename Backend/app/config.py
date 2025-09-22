@@ -1,3 +1,21 @@
+"""
+Configuration Settings for TripPlanner Multi-Agent System
+
+This module provides centralized configuration management for the TripPlanner
+application, including environment variables, database settings, and system
+parameters. It uses environment variables with sensible defaults for easy
+deployment and configuration.
+
+Key configuration areas:
+- Application environment and port settings
+- MongoDB connection and database configuration
+- Default currency and cost cap settings
+- Step limits for processing control
+
+All settings can be overridden via environment variables for flexible
+deployment across different environments.
+"""
+
 import os
 
 class Settings:
