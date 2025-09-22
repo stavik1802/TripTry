@@ -25,7 +25,6 @@ A sophisticated AI-powered trip planning system that uses multiple specialized a
 ## 🏗️ Architecture
 
 
-
 ### Agent Coordination Graph
 
 The following diagram illustrates the end-to-end agent workflow, including retries, SLA shortcuts, gap detection/filling, and error handling.
