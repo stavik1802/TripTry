@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: tripplanner-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: agent_memory
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./Backend/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - tripplanner-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: tripplanner-backend
+    restart: unless-stopped
+    environment:
+      # MongoDB Configuration
+      - MONGO_URI=${MONGO_URI}
+      
+      # API Configuration
+      - SLA_SECONDS=300
+      - PYTHONPATH=/app
+      - ENVIRONMENT=production
+      - DEBUG=false
+      
+      # OpenAI API Key (required for output generation)
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      
+      # Tavily API Key (required for web search)
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
+      
+      # Optional: Other API keys you might need
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-}
+      - WEATHER_API_KEY=${WEATHER_API_KEY:-}
+      - FLIGHT_API_KEY=${FLIGHT_API_KEY:-}
+      
+      # Logging
+      - LOG_LEVEL=INFO
+      
+    env_file:
+      - ./Backend/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    volumes:
+      - ./Backend:/app
+    networks:
+      - tripplanner-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend
+  frontend:
+    build:
+      context: ./trip_ui
+      dockerfile: Dockerfile
+    container_name: tripplanner-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - tripplanner-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  tripplanner-network:
+    driver: bridge

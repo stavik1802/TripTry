@@ -1,0 +1,63 @@
+# Ignore development files
+Backend/__pycache__/
+Backend/app/__pycache__/
+Backend/app/agents/__pycache__/
+Backend/app/graph/__pycache__/
+Backend/app/storage/__pycache__/
+Backend/app/services/__pycache__/
+Backend/app/routes/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.pytest_cache/
+
+# Ignore test files
+test_*.py
+*_test.py
+tests/
+
+# Ignore debug files
+debug/
+debug_*.py
+
+# Ignore documentation
+*.md
+docs/
+
+# Ignore development scripts
+setup.bat
+start-dev.*
+run-*.sh
+get-docker.sh
+
+# Ignore Docker files (EB handles deployment)
+Dockerfile*
+docker-compose*.yml
+
+# Ignore frontend source (keep only built dist)
+trip_ui/src/
+trip_ui/node_modules/
+trip_ui/package*.json
+trip_ui/vite.config.ts
+trip_ui/tailwind.config.js
+trip_ui/postcss.config.js
+trip_ui/tsconfig*.json
+trip_ui/eslint.config.js
+
+# Ignore other frontend
+Frontend/
+
+# Ignore git
+.git/
+.gitignore
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Keep these important files
+!requirements.txt
+!application.py
+!trip_ui/dist/**
