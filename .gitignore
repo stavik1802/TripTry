@@ -1,5 +1,15 @@
 
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+Backend/.env
+Backend/app/.env
+trip_ui/.env
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+
