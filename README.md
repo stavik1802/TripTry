@@ -91,6 +91,7 @@ The following diagram illustrates the end-to-end agent workflow, including retri
    MONGO_URI=mongodb://admin:password123@localhost:27017/agent_memory
    ```
 
+
 ### Development Setup
 
 #### Option 1: Docker (Recommended)
@@ -212,6 +213,36 @@ GET /_debug/system_status
 - **Health Check**: `/health` endpoint
 - **Auto Scaling**: Enabled with min 1, max 10 instances
 - **URL**: Automatically provided by EB (e.g., `your-app.region.elasticbeanstalk.com`)
+
+**Setting Environment Variables on EB:**
+
+After initial deployment, you need to set your API keys and configuration:
+
+```bash
+# Option 1: Use the provided script (recommended)
+./set_env.sh
+
+# Option 2: Set manually
+eb setenv OPENAI_API_KEY="sk-your-openai-key"
+eb setenv TAVILY_API_KEY="tvly-your-tavily-key"
+eb setenv MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority"
+eb setenv MONGODB_DB="agent_memory"
+eb setenv ENVIRONMENT="production"
+eb setenv DEBUG="false"
+eb setenv SLA_SECONDS="300"
+```
+
+**Required Environment Variables:**
+- `OPENAI_API_KEY` - Your OpenAI API key (required)
+- `TAVILY_API_KEY` - Your Tavily API key (required for web search)
+- `MONGODB_URI` - MongoDB connection string (required)
+- `MONGODB_DB` - Database name (default: "agent_memory")
+
+**Optional Environment Variables:**
+- `OPENAI_MODEL` - OpenAI model to use (default: "gpt-4o-mini")
+- `ENVIRONMENT` - Environment setting (default: "production")
+- `DEBUG` - Debug mode (default: "false")
+- `SLA_SECONDS` - Request timeout (default: "300")
 
 ### Docker Deployment
 ```bash
@@ -388,9 +419,7 @@ python -m uvicorn app.server:app --reload
 ## 📊 Performance
 
 ### Metrics
-- **Response Time**: < 30 seconds for complex trips
 - **Memory Usage**: ~500MB per agent instance
-- **Concurrent Users**: Supports 100+ simultaneous requests
 - **Accuracy**: 95%+ for standard trip planning requests
 
 ### Optimization
@@ -399,13 +428,6 @@ python -m uvicorn app.server:app --reload
 - **Circuit Breakers**: Prevents cascading failures
 - **Memory Management**: Automatic cleanup and consolidation
 
-## 🤝 Contributing
-
-1. **Fork the repository**
-2. **Create feature branch**: `git checkout -b feature/new-agent`
-3. **Make changes** and add tests
-4. **Run tests**: `python test_imports.py`
-5. **Submit pull request**
 
 ### Code Style
 - Follow PEP 8 for Python code
