@@ -197,6 +197,8 @@ GET /_debug/system_status
 ### AWS Elastic Beanstalk (Recommended)
 ```bash
 # Deploy to AWS Elastic Beanstalk (handles everything automatically)
+eb init
+./set_env.sh (make sure to insert keys in this)
 ./deploy-eb.sh
 ```
 
@@ -356,16 +358,6 @@ REACT_APP_API_BASE=http://localhost:8000  # Alternative
 ## 🔍 Troubleshooting
 
 ### Common Issues
-
-#### Import Errors
-```bash
-# Check Python version (requires 3.9+)
-python --version
-
-# Verify all imports
-python test_imports.py
-```
-
 #### Memory Issues
 ```bash
 # Check MongoDB connection
@@ -450,3 +442,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Built with ❤️ using AI agents and modern web technologies**
+
