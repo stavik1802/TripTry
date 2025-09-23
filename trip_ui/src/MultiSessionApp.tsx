@@ -104,9 +104,11 @@ export default function MultiSessionApp(): JSX.Element {
   const [inputMessage, setInputMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [showInfoBar, setShowInfoBar] = useState<boolean>(true);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -288,10 +290,10 @@ export default function MultiSessionApp(): JSX.Element {
 
   return (
     <div className="h-screen bg-gradient-to-b from-indigo-50 via-slate-50 to-slate-100 flex">
-      {/* Sidebar - Session List */}
+      {/* Sidebar - Session List (left) */}
       <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-gray-800 mb-4">TripPlanner Chat</h1>
+          <h1 className="text-xl font-bold text-gray-800 mb-4">Travel Assistant Chat</h1>
           <div className="space-y-2">
             <input
               type="text"
@@ -347,8 +349,10 @@ export default function MultiSessionApp(): JSX.Element {
         </div>
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      {/* Main Content: Chat (left) + Info Panel (right) */}
+      <div className="flex-1 flex">
+        {/* Chat Column */}
+        <div className="flex-1 flex flex-col">
         {activeSession ? (
           <>
             {/* Chat Header */}
@@ -431,6 +435,7 @@ export default function MultiSessionApp(): JSX.Element {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about your trip planning..."
+                  ref={inputRef}
                   className="flex-1 min-h-[60px] max-h-32 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-100 resize-none"
                   disabled={loading}
                 />
@@ -452,6 +457,57 @@ export default function MultiSessionApp(): JSX.Element {
             </div>
           </div>
         )}
+        </div>
+
+        {/* Info Panel (right) */}
+        <div className="w-96 border-l border-gray-200 bg-white flex flex-col">
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div className="font-semibold text-gray-800">About this assistant</div>
+            <button
+              className="text-xs text-indigo-700 hover:underline"
+              onClick={() => setShowInfoBar(v => !v)}
+            >
+              {showInfoBar ? 'Hide' : 'Show'}
+            </button>
+          </div>
+          {showInfoBar && (
+            <div className="p-4 overflow-y-auto">
+              <p className="text-sm text-gray-700">
+                Your AI travel companion for general trip advice and planning. It can:
+              </p>
+              <ul className="list-disc ml-5 mt-2 text-sm text-gray-700 space-y-1">
+                <li>Recommend cities and best times to visit</li>
+                <li>Suggest restaurants and points of interest</li>
+                <li>Build and optimize day-by-day itineraries</li>
+                <li>Estimate intercity fares and trip budgets</li>
+                <li>Export plans to JSON/Markdown/HTML/PDF</li>
+              </ul>
+              <div className="mt-4 text-xs font-medium text-gray-600">Sample questions</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {[
+                  'Recommend 3 cities for a 4-day trip from Chicago in November',
+                  'Find top 5 budget-friendly restaurants in Rome near Trevi Fountain',
+                  'Create a 3-day Lisbon itinerary focused on museums and history',
+                  'Estimate cost to travel from Paris to Amsterdam by train',
+                  'Suggest family-friendly POIs in Tokyo within 2km of Shinjuku',
+                  'Plan a weekend foodie tour in Mexico City under $400'
+                ].map((q) => (
+                  <button
+                    key={q}
+                    className="text-xs bg-gray-50 border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-100"
+                    onClick={() => {
+                      setInputMessage(q);
+                      setActiveSessionId(prev => prev || (sessions[0]?.id || ''));
+                      setTimeout(() => inputRef.current?.focus(), 0);
+                    }}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
